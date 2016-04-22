@@ -5,7 +5,7 @@ A graphical interface that allows you to manage members of a team, see charts ab
 
 The actual version is 1.8.0.
 
-It is a evolution of this tutorial[this tutorial from code.makery](http://code.makery.ch/library/javafx-8-tutorial/ "code.makery tutorial") with several additionnal features:
+It is a evolution of [this tutorial from code.makery](http://code.makery.ch/library/javafx-8-tutorial/ "code.makery tutorial") with several additionnal features:
 - edit photo
 - edit double click to edit
 - trombinoscope
@@ -36,5 +36,6 @@ java -Xmx[nb RAM]G -jar LsisAppGestion-{version}.jar
 # Contacts
 
 gael dot guibon at gmail.com
+gael dot guibon at lsis.org
 
-@2016 SRCMF LaTTiCe-CNRS# LAKME-SRCMF-visu
+@2016 SRCMF LSIS-CNRS
