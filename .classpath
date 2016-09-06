@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="/home/gael/workspace/commons-lang3-3.3.2/commons-lang3-3.3.2.jar"/>
 	<classpathentry kind="lib" path="/home/gael/workspace/commons-io-2.4/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="/home/gael/workspace/Shell.jar"/>
+	<classpathentry kind="lib" path="/home/gael/Programmes/eclipsefx/themes/aquafx-0.1-complete/aquafx-0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

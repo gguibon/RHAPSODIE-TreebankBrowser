@@ -24,8 +24,8 @@ The tutorial (link above) shows you an easy way to build its the "deployment" se
 # Usage
 
 There are two executable files in the root directory:
-- LsisAppGestion-1.8.jar --> java executable file
-- LsisAppGestion.dmg --> MAC installation image
+- TreebankBrowser-{version}.jar --> java executable file
+- TreebankBrowser-{version}.dmg --> MAC installation image
 
 Double click on Jar or type :
 
