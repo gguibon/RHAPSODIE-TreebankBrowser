@@ -1,20 +1,17 @@
-<<<<<<< HEAD
-LSIS-AppGestion
+RHAPSODIE-TreebankBrowser
 ===============
 
-A graphical interface that allows you to manage members of a team, see charts about their distribution per supervisors, entry date, etc. It allows you to obtain a trombinoscope of the members, and to filter your data.
-
-The actual version is 1.8.0.
-
-It is a evolution of [this tutorial from code.makery](http://code.makery.ch/library/javafx-8-tutorial/ "code.makery tutorial") with several additionnal features:
-- edit photo
-- edit double click to edit
-- trombinoscope
-- additionnal charts
-- additionnal filter
+Treebank Browser is a graphical tool which allows to browse treebanks graphically. It was initially made for the [RHAPSODIE](http://www.projet-rhapsodie.fr/) projet purposes. Its main assets are :
+- create multiple projects with metada, licence information, project descriptions, etc. and save them.
+- generate server ready web interface from your project
+- no need to change your data ! With [Arborator's engine](http://arborator.ilpga.fr/), it reads most common treebank data and even oral speeches treebanks !
+- Fast interface
 - etc.
 
-It was initially made for the [LSIS research laboratory](http://www.lsis.org/ "lsis home page").
+
+The actual version is 0.8.0. 
+
+The manager UI is an evolution of [this tutorial from code.makery](http://code.makery.ch/library/javafx-8-tutorial/ "code.makery tutorial") with several additionnal features.
 
 
 # Build
@@ -27,11 +24,13 @@ The tutorial (link above) shows you an easy way to build its the "deployment" se
 There are two executable files in the root directory:
 - TreebankBrowser-{version}.jar --> java executable file
 - TreebankBrowser-{version}.dmg --> MAC installation image
+- TreebankBrowser-{version}.exe --> Windows executable file
+- TreebankBrowser-{version}.deb --> Debian (linux) installation package
 
 Double click on Jar or type :
 
 ```
-java -Xmx[nb RAM]G -jar LsisAppGestion-{version}.jar
+java -Xmx[nb RAM]G -jar TreebankBrowser-{version}.jar
 ```
 
 # Contacts
@@ -39,8 +38,5 @@ java -Xmx[nb RAM]G -jar LsisAppGestion-{version}.jar
 gael dot guibon at gmail.com
 gael dot guibon at lsis.org
 
-@2016 SRCMF LSIS-CNRS
+@2016 ANR Rhapsodie 07 CORP 030 01 LPP-CNRS LSIS-CNRS
 =======
-# RHAPSODIE-TreebankBrowser
-A Treebank Browser interface to graphically explore treebanks corpora in different formats and manage them all.
->>>>>>> 1fb7b4842fdd60b493499ef27bec25318b2c8259
