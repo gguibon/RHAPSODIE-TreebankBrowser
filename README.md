@@ -35,8 +35,11 @@ java -Xmx[nb RAM]G -jar TreebankBrowser-{version}.jar
 
 # Contacts
 
+Gaël Guibon
 gael dot guibon at gmail.com
 gael dot guibon at lsis.org
 
+Kim Gerdes
+kim dot gerdes at univ-paris3 dot fr 
+
 @2016 ANR Rhapsodie 07 CORP 030 01 LPP-CNRS LSIS-CNRS
-=======
