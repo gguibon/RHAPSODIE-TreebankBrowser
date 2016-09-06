@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 LSIS-AppGestion
 ===============
 
@@ -39,3 +40,7 @@ gael dot guibon at gmail.com
 gael dot guibon at lsis.org
 
 @2016 SRCMF LSIS-CNRS
+=======
+# RHAPSODIE-TreebankBrowser
+A Treebank Browser interface to graphically explore treebanks corpora in different formats and manage them all.
+>>>>>>> 1fb7b4842fdd60b493499ef27bec25318b2c8259
