@@ -1,6 +1,10 @@
 package cnrs.rhapsodie.treebankbrowser.view;
 
-import javafx.beans.property.ObjectProperty;
+import cnrs.rhapsodie.treebankbrowser.MainApp;
+import cnrs.rhapsodie.treebankbrowser.StaticGenerator;
+import cnrs.rhapsodie.treebankbrowser.model.ProjectUI;
+import cnrs.rhapsodie.treebankbrowser.utils.Tools;
+import eu.hansolo.enzo.notification.Notification.Notifier;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -8,19 +12,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-
-import java.io.File;
-import java.time.LocalDate;
-
-import cnrs.rhapsodie.treebankbrowser.MainApp;
-import cnrs.rhapsodie.treebankbrowser.StaticGenerator;
-import cnrs.rhapsodie.treebankbrowser.model.ProjectUI;
-import cnrs.rhapsodie.treebankbrowser.util.DateUtil;
-import cnrs.rhapsodie.treebankbrowser.utils.Tools;
-import eu.hansolo.enzo.notification.Notification.Notifier;
 
 public class PersonOverviewController {
     @FXML

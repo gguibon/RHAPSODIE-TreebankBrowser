@@ -9,7 +9,7 @@
 <!-- stylesheets="@DarkTheme.css" -->
 <AnchorPane prefHeight="363.0" prefWidth="693.0" 
 	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="cnrs.lsis.appgestion.view.PersonOverviewController">
+	fx:controller="cnrs.rhapsodie.treebankbrowser.view.PersonOverviewController">
 	<children>
 		<SplitPane dividerPositions="0.40" layoutX="153.0"
 			layoutY="70.0" prefHeight="300.0" prefWidth="600.0"

@@ -1,19 +1,13 @@
 package cnrs.rhapsodie.treebankbrowser.view;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import cnrs.rhapsodie.treebankbrowser.MainApp;
+import eu.hansolo.enzo.notification.Notification.Notifier;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Hyperlink;
 import javafx.stage.FileChooser;
-import cnrs.rhapsodie.treebankbrowser.MainApp;
-import cnrs.rhapsodie.treebankbrowser.model.ProjectUI;
-import eu.hansolo.enzo.notification.Notification.Notifier;
 
 /**
  * The controller for the root layout. The root layout provides the basic
@@ -117,6 +111,7 @@ public class RootLayoutController {
     	alert.setContentText("Author: Gaël Guibon\n\ngael.guibon@lsis.org\n"
     			+ "gael.guibon@gmail.com\n\n"
     			+ "http://www.lsis.org\n\n"
+    			+ "Kim Gerdes\n\nkim.gerdes@univ-paris3.fr"
     			+ "Upgrading MarkJacob's example");    	
     	
     	alert.showAndWait();

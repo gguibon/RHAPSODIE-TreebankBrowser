@@ -983,4 +983,27 @@ public class Tools {
 		    str = new StringBuilder(str).replace(ind, ind+1,strToInsert).toString();
 		return str;
 	}
+	
+	/**
+	 * Prend un dossier et en retourne une liste de chemins de tous les fichiers
+	 * qui y sont presents. Pour une version retournant les Files du dossier,
+	 * voir dir2listefiles()
+	 * 
+	 * @param dir_path
+	 * @return liste de String
+	 * @throws Exception
+	 */
+	public void listf(String directoryName, ArrayList<File> files) {
+	    File directory = new File(directoryName);
+
+	    // get all the files from a directory
+	    File[] fList = directory.listFiles();
+	    for (File file : fList) {
+	        if (file.isFile()) {
+	            files.add(file);
+	        } else if (file.isDirectory()) {
+	            listf(file.getAbsolutePath(), files);
+	        }
+	    }
+	}
 }

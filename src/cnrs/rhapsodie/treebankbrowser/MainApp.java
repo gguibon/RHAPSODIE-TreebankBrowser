@@ -45,8 +45,11 @@ import cnrs.rhapsodie.treebankbrowser.model.PersonListWrapper;
 import cnrs.rhapsodie.treebankbrowser.model.ProjectUI;
 import cnrs.rhapsodie.treebankbrowser.util.OsValidator;
 import cnrs.rhapsodie.treebankbrowser.utils.JarResources;
+import cnrs.rhapsodie.treebankbrowser.utils.MXMNode;
+import cnrs.rhapsodie.treebankbrowser.utils.MXMTree;
 import cnrs.rhapsodie.treebankbrowser.utils.ResourcesFromJar;
 import cnrs.rhapsodie.treebankbrowser.utils.Tools;
+import cnrs.rhapsodie.treebankbrowser.utils.Tree;
 import cnrs.rhapsodie.treebankbrowser.view.PersonEditDialogController;
 import cnrs.rhapsodie.treebankbrowser.view.PersonOverviewController;
 import cnrs.rhapsodie.treebankbrowser.view.RootLayoutController;
@@ -90,7 +93,10 @@ public class MainApp extends Application {
         // Set the application icon.
 //        this.primaryStage.getIcons().add(new Image("file:/resources/images/address_book_32.png"));
 //        this.primaryStage.getIcons().add(new Image(new Tools().accessRessourceFile("/resources/images/adress_book_32.png")));
-        Image img = new Image(MainApp.class.getResourceAsStream("/resources/images/address_book_32.png"));
+        Image img = new Image(MainApp.class.getResourceAsStream(
+//        		String.format("%s%s%s%s%s%s", File.separatorChar, "resources", File.separatorChar,
+//        				"images", File.separatorChar, "address_book_32.png")));
+        				"/resources/images/address_book_32.png"));
         this.primaryStage.getIcons().add(img);
 
         this.primaryStage.setMaximized(true);
@@ -420,6 +426,10 @@ public class MainApp extends Application {
 //		ResourcesFromJar rfj = new ResourcesFromJar();
 //		rfj.get();
 //		System.exit(0);
+        
+       
+        
+       
     	
     }
 }

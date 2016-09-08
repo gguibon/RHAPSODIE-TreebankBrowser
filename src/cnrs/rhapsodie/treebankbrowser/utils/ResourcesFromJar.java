@@ -6,8 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -27,16 +29,23 @@ public class ResourcesFromJar {
 
 	
 	public ResourcesFromJar(){
-		
+		System.out.println("The jar file is : "+jarFile);
+		try {
+			System.out.println( URLDecoder.decode(jarFile.getAbsolutePath(), "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+
 	}
 	
 	public void get() throws Exception{
-		if(jarFile.isFile()) {  // Run with JAR file
-		    final JarFile jar = new JarFile(jarFile);
+//		if(jarFile.isFile()) {  // Run with JAR file
+		    final JarFile jar = new JarFile(URLDecoder.decode(jarFile.getAbsolutePath(), "UTF-8"));
 		    final Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
 		    List<JarEntry> entriesList = Collections.list(entries);
 //		    while(entries.hasMoreElements()) {
-		    System.out.println("entries : " + entriesList.size());
+//		    System.out.println("entries : " + entriesList.size());
 //		    System.exit(0);
 		    int i = 0;
 		    for(JarEntry entry : entriesList){
@@ -44,24 +53,24 @@ public class ResourcesFromJar {
 //		    	i++;
 //		    	if(!entries.hasMoreElements())break;
 		        final String name = entry.getName();//entries.nextElement().getName();
-		        System.out.println("next element = "+name);
+//		        System.out.println("next element = "+name);
 		        if (name.startsWith(path + "/")) { //filter according to the path
-		            System.out.println(name);
+//		            System.out.println(name);
 		            String nameRelative = name.replace("resources"+File.separator+"interface-statique", "");
-		            System.out.println(nameRelative);
+//		            System.out.println(nameRelative);
 		            if(name.endsWith("/")){
-		            	System.out.println("creaDir " + "generatedUI/"+nameRelative);
+//		            	System.out.println("creaDir " + "generatedUI/"+nameRelative);
 		            	createTree("generatedUI//"+nameRelative);
 		            }else if(FilenameUtils.getExtension(name).equals("jpg") || FilenameUtils.getExtension(name).equals("png")
 		            		|| FilenameUtils.getExtension(name).equals("gif") || FilenameUtils.getExtension(name).equals("otf")
 		            		|| FilenameUtils.getExtension(name).equals("ttf")){
-		            	System.out.println("export resource from "+"/"+name);
-		            	System.out.println(ExportResource("/"+name));
+//		            	System.out.println("export resource from "+"/"+name);
+		            	ExportResource("/"+name);
 		            }
 		            else{
-		            	System.out.println("creaFile " + "generatedUI"+nameRelative);
+//		            	System.out.println("creaFile " + "generatedUI"+nameRelative);
 		            	Tools tool = new Tools();
-		            	System.out.println("init tool");
+//		            	System.out.println("init tool");
 		            	String str = tool.accessRessourceFile("/"+name);
 //		            	System.out.println(str);
 		            	Tools.ecrire("generatedUI"+nameRelative, str);
@@ -70,23 +79,23 @@ public class ResourcesFromJar {
 		        }
 		    }
 		    jar.close();
-		    System.out.println("jar closing");
+//		    System.out.println("jar closing");
 		    
-		} else { // Run with IDE
-		    final URL url = MainApp.class.getResource("/" + path);
-		    if (url != null) {
-		        try {
-		            final File apps = new File(url.toURI());
-		            for (File app : apps.listFiles()) {
-		                System.out.println(app);
-		            }
-		        } catch (URISyntaxException ex) {
-		            // never happens
-		        }
-		    }
-		    System.out.println("should close");
-		    
-		}
+//		} else { // Run with IDE
+//		    final URL url = MainApp.class.getResource("/" + path);
+//		    if (url != null) {
+//		        try {
+//		            final File apps = new File(url.toURI());
+//		            for (File app : apps.listFiles()) {
+//		                System.out.println(app);
+//		            }
+//		        } catch (URISyntaxException ex) {
+//		            // never happens
+//		        }
+//		    }
+//		    System.out.println("should close");
+//		    
+//		}
 	}
 	
 	/**
