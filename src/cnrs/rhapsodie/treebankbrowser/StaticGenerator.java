@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,7 +18,6 @@ import cnrs.rhapsodie.treebankbrowser.util.OsValidator;
 import cnrs.rhapsodie.treebankbrowser.utils.Corpus;
 import cnrs.rhapsodie.treebankbrowser.utils.ResourcesFromJar;
 import cnrs.rhapsodie.treebankbrowser.utils.Tools;
-import cnrs.rhapsodie.treebankbrowser.utils.Tree;
 
 /**
  * Class which generate the static web interface and launch it on the default browser
@@ -39,14 +40,9 @@ public class StaticGenerator {
 			+ "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>";
 	
 	final static Pattern pattern = Pattern.compile("<h2 id=\"samplename\">(.+?)</h2>");
-//	public static void main(String[] args) throws Exception{
-//		creaHtmlTrees(rawDir);
-//		insertMetaInfo();
-//		adaptSampleView();
-//		File index = new File(baseDirCrea+ File.separatorChar +"index.html");
-//		openIt(index.getAbsolutePath());
-//	}
-//	
+	private static HashMap<String, List<String>> mapDirsContents = new HashMap<String, List<String>>();
+	private static HashMap<String, List<String[]>> mapDirsContentsLocation = new HashMap<String, List<String[]>>();
+
 	public void generateStaticInterface(String title, String subtitle, 
 			String projectTitle, String projectHtml, String licenceTitle, String licenceHtml
 			, String rawDir) throws Exception{
@@ -59,9 +55,14 @@ public class StaticGenerator {
 		
 		if(rawDir.length()!=0)this.rawDir = rawDir;
 		
+		mapDirsContents.clear();
+		mapDirsContentsLocation.clear();
+		
 		insertMetaInfo();
-		creaHtmlTreesRhapsodie(this.rawDir);
-		adaptSampleView();
+//		creaHtmlTreesRhapsodie(this.rawDir);
+		creaHtmlTreesRhapsodieDirs(this.rawDir);
+//		adaptSampleView();
+		adaptSampleViewWithDirs();
 		File index = new File(baseDirCrea+ File.separatorChar +"index.html");
 		openIt(index.getAbsolutePath());
 //		((JavascriptExecutor)this.webDriver).executeScript("alert('Test')");
@@ -128,7 +129,6 @@ public class StaticGenerator {
 	
 	
 	private  void creaHtmlTreesRhapsodie(String dirPath) throws Exception {
-//		List<String> listFiles = Tools.dir2listepaths(dirPath);
 		List<String> listFiles = new ArrayList<String>();
 		Tools.listFilesAndSubfiles(dirPath, listFiles);
 		int sampleIndex = 1;
@@ -137,7 +137,6 @@ public class StaticGenerator {
 			String extension = FilenameUtils.getExtension(filePath);
 			String filename = FilenameUtils.getName(filePath);
 			String filebasename = FilenameUtils.getBaseName(filePath);
-			String filePathNoName = FilenameUtils.getPath(filePath);
 			
 			// get the sample name from the file name
 			HashMap<String, String> sampleInfos = new HashMap<String, String>();
@@ -152,10 +151,7 @@ public class StaticGenerator {
 				String tree = filePath.replace(dirPath+File.separator, "|");
 				tree = tree.replaceAll("/", "<br/>|-----");
 				sampleInfos.put("sample name", tree);
-//						filePath.replace(dirPath, "&#10;|---"));
 			}
-//					filePathNoName + "__" + filename);
-//					FilenameUtils.getBaseName(filePath));
 			
 			StringBuilder sbOld = new StringBuilder();
 			StringBuilder sbNew = new StringBuilder();
@@ -172,7 +168,6 @@ public class StaticGenerator {
 			dirFile.mkdirs();
 			
 			Tools tool = new Tools();
-//			String treesModel = tool.accessRessourceFile("/resources/interface-statique/samples/treesModel.html");
 			String treesModel = tool.accessRessourceFile(String.format("%s%s%s%s%s%s%s%s", File.separatorChar
 					, "resources", File.separatorChar, "interface-statique",
 					File.separatorChar, "samples" , File.separatorChar, "treesModel.html"));
@@ -209,6 +204,100 @@ public class StaticGenerator {
 		
 		
 		
+	}
+	
+	private  void creaHtmlTreesRhapsodieDirs(String dirPath) throws Exception {
+		mapDirsContents = Tools.dir2map(dirPath);
+		
+		int sampleIndex = 1;
+		Iterator it = mapDirsContents.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry pair = (Map.Entry)it.next();
+	        System.out.println(pair.getKey() + " = " + pair.getValue());
+	        it.remove(); // avoids a ConcurrentModificationException
+	        
+	        
+	        List<String> listFiles = (List<String>) pair.getValue();
+	        List<String[]> listFilesLocation = new ArrayList<String[]>();
+	        for (String filePath : listFiles){
+	        	String extension = FilenameUtils.getExtension(filePath);
+				String filename = FilenameUtils.getName(filePath);
+				String filebasename = FilenameUtils.getBaseName(filePath);
+				String filePathNoName = FilenameUtils.getPath(filePath);
+				
+				// get the sample name from the file name
+				HashMap<String, String> sampleInfos = new HashMap<String, String>();
+				
+				boolean isFile ;
+				if(new File(filePath).isDirectory()){
+					sampleInfos.put("sample name", filename);
+					sampleInfos.put("type", "directory");
+					isFile = false;
+				}else{
+					sampleInfos.put("sample name", filename);
+					sampleInfos.put("type", "file");
+					isFile = true;
+				}
+				
+				
+				// create the paths dirs if none
+				String p = String.format("%s%s%s%s%s", baseDirCrea, File.separatorChar, "samples",
+						File.separatorChar, "sample" + sampleIndex);
+				File dirFile = new File(p);
+				dirFile.mkdirs();
+				
+				if(isFile){
+					// get conll content into a sb
+					StringBuilder sbNew = new StringBuilder();
+					sbNew.append( Tools.readFile(filePath) + "\n");
+					
+					// get the treesModel content
+					Tools tool = new Tools();
+					String treesModel = tool.accessRessourceFile(String.format("%s%s%s%s%s%s%s%s", File.separatorChar
+							, "resources", File.separatorChar, "interface-statique",
+							File.separatorChar, "samples" , File.separatorChar, "treesModel.html"));
+					
+					
+					// convert conll content to list of conll sentences
+					List<String> sentNew = Corpus.getSentences(Tools.tempFile("new", ".txt", sbNew.toString()));
+					// merge the tree model with the conll sentences into <conll> tag
+					StringBuilder sbNewMerged = new StringBuilder();
+					for (String sent : sentNew){
+						sbNewMerged.append(String.format("%s%s%s\n", "<conll>",
+								Tools.replaceLastOccurrence(sent, "\n", "") , "</conll>") );
+					}
+					
+					
+					// write the conlls inside the treesModel and create the files
+					Tools.ecrire(String.format("%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename),
+							treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
+									sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name")) );
+				}
+				// add additionnal infos to a new list string[]
+				listFilesLocation.add(new String[]{filePath, p, sampleInfos.get("type")});
+				
+				// increment sampleIndex
+				if(isFile)sampleIndex++;
+	        }
+	        
+	        mapDirsContentsLocation.put((String)pair.getKey(), listFilesLocation);
+	        
+	        
+	        // TODO : continuer à recréer l'arborescence en map (en filesysteme ca doit rester plat)
+	        //, chaque fichier .html a une info sur son lieu dans l'arbo virtuelle, + son chemin réel + son nom
+	        // + ajouter visu arborescence 
+	        // ne pas recréer les dirs (donc modifier code ci-dessus)
+	        
+	    }
+	    System.out.println("locations :");
+	    Iterator itLocation = mapDirsContentsLocation.entrySet().iterator();
+	    while (itLocation.hasNext()) {
+	        Map.Entry pair = (Map.Entry)itLocation.next();
+	        List<String[]> list = (List<String[]>)pair.getValue();
+	        for (String[] val : list)
+	        	System.out.println(pair.getKey() + " = " + val[0]  + " " + val[1]+ " "+ val[2]);
+	    }
+//		System.out.println("locations : \n" + mapDirsContentsLocation.toString());
 	}
 	
 	
@@ -275,6 +364,119 @@ public class StaticGenerator {
 		replaceInFile(baseDirCrea+File.separatorChar +"samples.html", "{sampleslist}", samplesView.toString() );
 	}
 	
+	/**
+	 * adapt the sample view with the reality of the trees.html and the directory structure
+	 * @throws IOException
+	 */
+	private  void adaptSampleViewWithDirs() throws IOException {
+		int i = 0;
+		StringBuilder samplesView = new StringBuilder();
+		
+		// first process the "root" key directory (in order to have it show first
+		List<String[]> listRoot = mapDirsContentsLocation.get("root");
+		// get the number of files (and not dirs) in this directory (entry key)
+        List<String[]> listFilesRoot = new ArrayList<String[]>();
+        for(String[] val : listRoot){if(val[2].equals("file"))listFilesRoot.add(val);}
+        samplesView.append("<div class=\"panel-group\"><div class=\"panel panel-default\">"
+    			+ "<div class=\"panel-heading\"> "
+    			+ "<button class=\"btn btn-success opacity-hover\" style=\"width:100%\" "
+    			+ "data-toggle=\"collapse\" data-target=\"#collapse"+i+"\">"
+    			+ "<h4 class=\"panel-title\">"+ "root"  +"</h4><span class=\"badge\">"+ listFilesRoot.size() +"</span></button></div>"
+    			+ "<div id=\"collapse"+i+"\" class=\"panel-collapse collapse\"> <div class=\"panel-body\">");
+        for (String[] val : listRoot){
+        	if(val[2].equals("file")){
+        		String dirPath = val[1];
+    			if(Tools.dirFileExists(String.format("%s%s%s", dirPath, File.separatorChar, "trees.html" ) ) ){
+    				
+    				// retrieve the numbers of trees for both old and new
+    				int n = Tools.countOccurrences( Tools.readFile(dirPath+ File.separatorChar +"trees.html"),"<conll>");
+    				int o = 0;
+    				
+    				// get the href content for both old and new
+    				String relPath = String.format("%s%s"
+    						, Tools.relativisePath(dirPath, currentDir).replace(baseDirCrea+File.separatorChar, "")
+    						, "trees.html");
+    				
+    				// get the sample name
+    				final Matcher matcherNew = pattern.matcher(Tools.readFile(
+    						String.format("%s%s"
+    								, dirPath + File.separatorChar
+    								, "trees.html")));
+    				
+    				if(matcherNew.find()){
+    					samplesView.append(	sampleRow(o, n, "", relPath, matcherNew.group(1)) );
+    				}else{
+    					samplesView.append( sampleRow(o, n, "", relPath, "Nonamed Sample") );
+    				}
+    			}
+        	}else if(val[2].equals("directory")){
+        		
+        	}
+        }
+        samplesView.append("</div> </div> </div> </div>");
+        
+		
+		// iterate through the map
+		Iterator itLocation = mapDirsContentsLocation.entrySet().iterator();
+	    while (itLocation.hasNext()) {
+	        Map.Entry pair = (Map.Entry)itLocation.next();
+	        // avoid the "root" entry
+	    	if(pair.getKey().equals("root")){continue;}
+	        List<String[]> list = (List<String[]>)pair.getValue();
+	        // get the number of files (and not dirs) in this directory (entry key)
+	        List<String[]> listFiles = new ArrayList<String[]>();
+	        for(String[] val : list){
+	        	if(val[2].equals("file"))listFiles.add(val);
+	        }
+	        
+	        if(i>0){
+	        	samplesView.append("<div class=\"panel-group\"><div class=\"panel panel-default\">"
+	        			+ "<div class=\"panel-heading\"> "
+	        			+ "<button class=\"btn btn-success opacity-hover\" style=\"width:100%\" "
+	        			+ "data-toggle=\"collapse\" data-target=\"#collapse"+i+"\">"
+	        			+ "<h4 class=\"panel-title\">"+ (String)pair.getKey()  +"</h4><span class=\"badge\">"+ listFiles.size() +"</span></button></div>"
+	        			+ "<div id=\"collapse"+i+"\" class=\"panel-collapse collapse\"> <div class=\"panel-body\">");
+	        }
+	        
+	        for (String[] val : list){
+	        	if(val[2].equals("file")){
+	        		String dirPath = val[1];
+	        		String sampleName = FilenameUtils.getName(val[0]);
+        			if(Tools.dirFileExists(String.format("%s%s%s", dirPath, File.separatorChar, sampleName ) ) ){
+        				
+        				// retrieve the numbers of trees for both old and new
+        				int n = Tools.countOccurrences( Tools.readFile(dirPath+ File.separatorChar +sampleName),"<conll>");
+        				int o = 0;
+        				
+        				// get the href content for both old and new
+        				String relPath = String.format("%s%s"
+        						, Tools.relativisePath(dirPath, currentDir).replace(baseDirCrea+File.separatorChar, "")
+        						, sampleName);
+        				
+        				// get the sample name
+        				final Matcher matcherNew = pattern.matcher(Tools.readFile(
+        						String.format("%s%s"
+        								, dirPath + File.separatorChar
+        								, sampleName)));
+        				
+        				if(matcherNew.find()){
+        					samplesView.append(	sampleRow(o, n, "", relPath, matcherNew.group(1)) );
+        				}else{
+        					samplesView.append( sampleRow(o, n, "", relPath, "Nonamed Sample") );
+        				}
+        			}
+	        	}else if(val[2].equals("directory")){
+	        		
+	        	}
+	        }
+	        if(i>0)samplesView.append("</div> </div> </div> </div>");
+
+	        i++;
+	    }
+	    
+	    replaceInFile(baseDirCrea+File.separatorChar +"samples.html", "{sampleslist}", samplesView.toString() );
+		}
+	
 	
 	/**
 	 * generate the html for one row given the informations.
@@ -305,9 +507,32 @@ public class StaticGenerator {
 		
 		
 		if(n == 0){
-			sb.append("<li class=\"list-group-item col-xs-12 opacity-hover\"><a class=\"btn-list btn btn-default btn-empty\" style=\"text-align: left;\"><span class=\"badge\">0</span>"+sampleName+"</a></li>");
+			sb.append("<li class=\"list-group-item col-xs-12 opacity-hover\"><a class=\"btn-list btn btn-default btn-empty\" style=\"text-align: left; width:50%; margin-left:25%\"><span class=\"badge\">0</span>"+sampleName+"</a></li>");
 		}else{
-			sb.append("<li class=\"list-group-item col-xs-12 opacity-hover\"><a  href=\""+nUrl+"\" class=\"btn-list animsition-link btn btn-primary\" style=\"text-align: left;\"><span class=\"badge\">"+n+"</span>"+sampleName+"</a></li>");
+			sb.append("<li class=\"list-group-item col-xs-12 opacity-hover\"><a  href=\""+nUrl+"\" class=\"btn-list animsition-link btn btn-primary\" style=\"text-align: left; width:50%; margin-left:25%\"><span class=\"badge\">"+n+"</span>"+sampleName+"</a></li>");
+		}
+		sb.append("</div>");
+		return sb.toString();
+	}
+	
+	/**
+	 * generate the html for one row given the informations. This is for a directory name separator.
+	 * @param o - oldSample number of trees
+	 * @param n - newSample number of trees
+	 * @param oUrl - href url for the sample
+	 * @param nUrl - href url for the sample (usually trees.html)
+	 * @param sampleName
+	 * @return the html
+	 */
+	private  String sampleRowDir(String dirName ){
+		StringBuilder sb = new StringBuilder();
+		sb.append("<div class=\"row no-margin\">");
+		if(dirName.length()!=0){
+			sb.append("<div class=\"alert alert-success\"><strong>"+ dirName +"</strong> </div>");
+//			sb.append("<li class=\"list-group-item col-xs-12 opacity-hover\"><a class=\"btn-list btn btn-default btn-empty\" style=\"text-align: left;\"><span class=\"badge\">0</span>"+sampleName+"</a></li>");
+		}else{
+			sb.append("<div class=\"alert alert-success\"><strong>directory</strong> </div>");
+//			sb.append("<li class=\"list-group-item col-xs-12 opacity-hover\"><a  href=\""+nUrl+"\" class=\"btn-list animsition-link btn btn-primary\" style=\"text-align: left;\"><span class=\"badge\">"+n+"</span>"+sampleName+"</a></li>");
 		}
 		sb.append("</div>");
 		return sb.toString();
@@ -342,6 +567,12 @@ public class StaticGenerator {
 //		Tools.copyDirToAnotherDir(StaticGenerator.class.getResource("/resources/interface-statique").toExternalForm()
 //				.replace("file:", "").replace("jar:","")
 //				, baseDirCrea);
+		
+		
+		
+		// erase the samples directory first to avoid files leak from project to another
+		Tools.deleteFolder(new File(String.format("%s%s%s", baseDirCrea, File.separatorChar, "samples")));
+
 		ResourcesFromJar rfj = new ResourcesFromJar();
 		rfj.get();
 
@@ -431,4 +662,8 @@ public class StaticGenerator {
             }
         }
     }
+	
+	
+	
+	
 }

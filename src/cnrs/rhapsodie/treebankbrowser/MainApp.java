@@ -1,23 +1,32 @@
 package cnrs.rhapsodie.treebankbrowser;
 
-import java.awt.Desktop;
-import java.awt.Toolkit;
 import java.io.File;
-import com.aquafx_project.AquaFx;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Properties;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.prefs.Preferences;
+import java.util.regex.Pattern;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+
+import org.apache.commons.io.FilenameUtils;
+
+import cnrs.rhapsodie.treebankbrowser.model.PersonListWrapper;
+import cnrs.rhapsodie.treebankbrowser.model.ProjectUI;
+import cnrs.rhapsodie.treebankbrowser.view.PersonEditDialogController;
+import cnrs.rhapsodie.treebankbrowser.view.PersonOverviewController;
+import cnrs.rhapsodie.treebankbrowser.view.RootLayoutController;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableStringValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -29,36 +38,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
-import cnrs.rhapsodie.treebankbrowser.model.PersonListWrapper;
-import cnrs.rhapsodie.treebankbrowser.model.ProjectUI;
-import cnrs.rhapsodie.treebankbrowser.util.OsValidator;
-import cnrs.rhapsodie.treebankbrowser.utils.JarResources;
-import cnrs.rhapsodie.treebankbrowser.utils.MXMNode;
-import cnrs.rhapsodie.treebankbrowser.utils.MXMTree;
-import cnrs.rhapsodie.treebankbrowser.utils.ResourcesFromJar;
-import cnrs.rhapsodie.treebankbrowser.utils.Tools;
-import cnrs.rhapsodie.treebankbrowser.utils.Tree;
-import cnrs.rhapsodie.treebankbrowser.view.PersonEditDialogController;
-import cnrs.rhapsodie.treebankbrowser.view.PersonOverviewController;
-import cnrs.rhapsodie.treebankbrowser.view.RootLayoutController;
-import eu.hansolo.enzo.notification.Notification.Notifier;
 
 public class MainApp extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
+    private static String dirName;
     
     /**
      * The data as an observable list of Persons.
@@ -184,7 +169,7 @@ public class MainApp extends Application {
 
             // Create the dialog Stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit Person");
+            dialogStage.setTitle("Edit Project");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
@@ -389,47 +374,7 @@ public class MainApp extends Application {
         return primaryStage;
     }
 
-    public static void main(String[] args) throws Exception {
-    	
-//    	String jarFile = "/home/gael/workspacefx/RHAPSODIE/build/deploy/bundles/RHAPSODIE.jar";
-//    	String destDir = "/home/gael/workspacefx/RHAPSODIE/build/deploy/bundles/extracted";
-//    	Tools.createDir(destDir);
-//    	java.util.jar.JarFile jar = new java.util.jar.JarFile(jarFile);
-//    	java.util.Enumeration enumEntries = jar.entries();
-//    	while (enumEntries.hasMoreElements()) {
-////    	while (enumEntries.nextElement().toString() != null){
-////    		if(!enumEntries.nextElement().toString().startsWith("resources"))continue;
-////	    		System.out.println(enumEntries.hasMoreElements() + "\t" +enumEntries.nextElement().toString());
-//	    	    java.util.jar.JarEntry file = (java.util.jar.JarEntry) enumEntries.nextElement();
-//	    	    
-////	    	    if(!file.getName().startsWith("resources/interface-statique"))continue;
-//	    	    System.out.println(file.getName());
-//	    	    if(file.getName().equals("resources/interface-statique/samples/treesModel.html"))break;
-//	    	    java.io.File f = new java.io.File(destDir + java.io.File.separator + file.getName());
-//	    	    if (file.isDirectory()) { // if its a directory, create it
-//	//    	    	f.getParentFile().mkdirs();
-//	    	        f.mkdir();
-//	    	        continue;
-//	    	    }
-//	    	    java.io.InputStream is = jar.getInputStream(file); // get the input stream
-//	    	    java.io.FileOutputStream fos = new java.io.FileOutputStream(f);
-//	    	    while (is.available() > 0) {  // write contents of 'is' to 'fos'
-//	    	        fos.write(is.read());
-//	    	    }
-//	    	    fos.close();
-//	    	    is.close();
-////    		}
-//    	}
-    	
+    public static void main(String[] args) throws Exception {    	
         launch(args);    	
-    	
-//		ResourcesFromJar rfj = new ResourcesFromJar();
-//		rfj.get();
-//		System.exit(0);
-        
-       
-        
-       
-    	
     }
 }

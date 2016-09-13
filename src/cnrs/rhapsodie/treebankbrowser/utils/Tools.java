@@ -29,7 +29,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -57,7 +59,7 @@ public class Tools {
 	static Pattern SPECIAL_REGEX_CHARS = Pattern
 			.compile("[{}()\\[\\].+*?^$\\\\|]");
 	
-	
+	private static String dirName ;
 
 	/**
 	 * Ecrire dans un fichier
@@ -1005,5 +1007,70 @@ public class Tools {
 	            listf(file.getAbsolutePath(), files);
 	        }
 	    }
+	}
+	
+	public static List<String> sortListString(List<String> list){
+		// Sorting
+		Collections.sort(list, new Comparator<String>() {
+		        @Override
+		        public int compare(String fruit2, String fruit1)
+		        {
+
+		            return  fruit1.compareTo(fruit2);
+		        }
+		    });
+		return list;
+	}
+	
+	/**
+	 * walk through a directory and returns a map which contains for each key (each directory) the list of
+	 * files in it. 
+	 * @param dirPath
+	 * @return map key = directory (or root), value = list of the files/dirs contained in it
+	 */
+	public static HashMap<String, List<String>> dir2map(String dirPath){
+		List<String[]> tuples = new ArrayList<String[]>();
+		dirName = dirPath;
+    	dir2tuples(new File(dirPath), dirName, tuples);
+    	HashMap<String, List<String>> map = new HashMap<String, List<String>>();
+    	for(String[] tuple : tuples){
+    		List<String> value = map.get(tuple[0]);
+    		if(value == null) value = new ArrayList<String>();
+    		value.add(tuple[1]);
+    		map.put(tuple[0], value);
+    	}
+    	return map;
+	}
+	
+	/**
+	 * walk through a directory and return a list of tuples {location, file/dir name}
+	 * directly modify the given tuples list (so no return statement needed)
+	 * @param node
+	 * @param entry
+	 * @param tuples
+	 */
+	private static void dir2tuples (File node, String entry, List<String[]> tuples) {
+		String[] tuple = {entry,node.getAbsolutePath()};//.replace(dirName, "")};
+		tuples.add(tuple);
+		if(node.isDirectory()){
+			String[] subNote = node.list();
+			for(String filename : subNote){
+				dir2tuples(new File(node, filename), node.toString().replace(dirName, "root"), tuples);
+			}
+		}
+	}
+	
+	public static void deleteFolder(File folder) {
+	    File[] files = folder.listFiles();
+	    if(files!=null) { //some JVMs return null for empty dirs
+	        for(File f: files) {
+	            if(f.isDirectory()) {
+	                deleteFolder(f);
+	            } else {
+	                f.delete();
+	            }
+	        }
+	    }
+	    folder.delete();
 	}
 }

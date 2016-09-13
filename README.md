@@ -1,4 +1,4 @@
-RHAPSODIE-TreebankBrowser
+TreebankBrowser
 ===============
 
 Treebank Browser is a graphical tool which allows to browse treebanks graphically. It was initially made for the [RHAPSODIE](http://www.projet-rhapsodie.fr/) projet purposes. Its main assets are :
@@ -9,7 +9,7 @@ Treebank Browser is a graphical tool which allows to browse treebanks graphicall
 - etc.
 
 
-The actual version is 0.8.0. 
+The actual version is 0.8.3. 
 
 The manager UI is an evolution of [this tutorial from code.makery](http://code.makery.ch/library/javafx-8-tutorial/ "code.makery tutorial") with several additionnal features.
 
@@ -18,14 +18,15 @@ The manager UI is an evolution of [this tutorial from code.makery](http://code.m
 
 This repo is built using the build.fxbuild file. You can build by importing the project in eclipse and build it, by directly executing the .fxbuild script.
 The tutorial (link above) shows you an easy way to build its the "deployment" section.
+Please import the dependencies in the "libs" directory before building it.
 
 # Usage
 
 There are two executable files in the root directory:
-- TreebankBrowser-{version}.jar --> java executable file
-- TreebankBrowser-{version}.dmg --> MAC installation image
-- TreebankBrowser-{version}.exe --> Windows executable file
-- TreebankBrowser-{version}.deb --> Debian (linux) installation package
+- [TreebankBrowser-{version}.jar](https://github.com/gguibon/TreebankBrowser/releases/download/0.8.3/TreebankBrowser-0.8.3-test.jar) --> java executable file
+- TreebankBrowser-{version}.dmg --> MAC installation image (coming soon!)
+- TreebankBrowser-{version}.exe --> Windows executable file (coming soon!)
+- TreebankBrowser-{version}.deb --> Debian (linux) installation package (coming soon!)
 
 Double click on Jar or type :
 

@@ -192,7 +192,7 @@ public class PersonOverviewController {
             Alert alert = new Alert(AlertType.WARNING);
             alert.initOwner(mainApp.getPrimaryStage());
             alert.setTitle("No Selection");
-            alert.setHeaderText("No Person Selected");
+            alert.setHeaderText("No Project Selected");
             alert.setContentText("Please select a person in the table.");
             
             alert.showAndWait();

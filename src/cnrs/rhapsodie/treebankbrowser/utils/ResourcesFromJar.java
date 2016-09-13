@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -47,39 +45,26 @@ public class ResourcesFromJar {
 //		    while(entries.hasMoreElements()) {
 //		    System.out.println("entries : " + entriesList.size());
 //		    System.exit(0);
-		    int i = 0;
 		    for(JarEntry entry : entriesList){
-//		    	if(i == 2)break;
-//		    	i++;
-//		    	if(!entries.hasMoreElements())break;
-		        final String name = entry.getName();//entries.nextElement().getName();
-//		        System.out.println("next element = "+name);
+		        final String name = entry.getName();
 		        if (name.startsWith(path + "/")) { //filter according to the path
-//		            System.out.println(name);
 		            String nameRelative = name.replace("resources"+File.separator+"interface-statique", "");
-//		            System.out.println(nameRelative);
 		            if(name.endsWith("/")){
-//		            	System.out.println("creaDir " + "generatedUI/"+nameRelative);
 		            	createTree("generatedUI//"+nameRelative);
 		            }else if(FilenameUtils.getExtension(name).equals("jpg") || FilenameUtils.getExtension(name).equals("png")
 		            		|| FilenameUtils.getExtension(name).equals("gif") || FilenameUtils.getExtension(name).equals("otf")
 		            		|| FilenameUtils.getExtension(name).equals("ttf")){
-//		            	System.out.println("export resource from "+"/"+name);
 		            	ExportResource("/"+name);
 		            }
 		            else{
-//		            	System.out.println("creaFile " + "generatedUI"+nameRelative);
 		            	Tools tool = new Tools();
-//		            	System.out.println("init tool");
 		            	String str = tool.accessRessourceFile("/"+name);
-//		            	System.out.println(str);
 		            	Tools.ecrire("generatedUI"+nameRelative, str);
 		            	
 		            }
 		        }
 		    }
 		    jar.close();
-//		    System.out.println("jar closing");
 		    
 //		} else { // Run with IDE
 //		    final URL url = MainApp.class.getResource("/" + path);
@@ -99,7 +84,7 @@ public class ResourcesFromJar {
 	}
 	
 	/**
-	 * Create all the directories in the path if they do not exist
+	 * Create all the directories in the path if they do not exist, but delete the dir
 	 * @param absolutePath
 	 * @throws IOException
 	 */
@@ -108,9 +93,9 @@ public class ResourcesFromJar {
 			System.out.println("you specified a file path, not a path of directories !");
 			System.exit(0);
 		}
+
 		absolutePath = FilenameUtils.separatorsToUnix(absolutePath);
 		absolutePath = FilenameUtils.normalizeNoEndSeparator(absolutePath);
-//		absolutePath = absolutePath.replaceFirst("/", "");
 		String[] directories = absolutePath.split("/");
 		String path = "";
 		//ArrayUtils.reverse(directories);
@@ -118,7 +103,6 @@ public class ResourcesFromJar {
 			path = "";
 			int k = 0;
 			while(!(k > i)){
-//				path += "/"+directories[k];
 				path += "/"+directories[k];
 				k++;
 			}
