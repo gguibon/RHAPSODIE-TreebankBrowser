@@ -1,5 +1,7 @@
 package cnrs.rhapsodie.treebankbrowser.view;
 
+import java.io.IOException;
+
 import cnrs.rhapsodie.treebankbrowser.MainApp;
 import cnrs.rhapsodie.treebankbrowser.StaticGenerator;
 import cnrs.rhapsodie.treebankbrowser.model.ProjectUI;
@@ -7,12 +9,17 @@ import cnrs.rhapsodie.treebankbrowser.utils.Tools;
 import eu.hansolo.enzo.notification.Notification.Notifier;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 
 public class PersonOverviewController {
     @FXML
@@ -40,7 +47,14 @@ public class PersonOverviewController {
     private Label rawDirLabel;
     @FXML
     private Label authorLabel;
-    
+    @FXML
+    private Button generateBtn;
+    @FXML
+    private Button editBtn;
+    @FXML
+    private Button newBtn;
+    @FXML
+    private Button deleteBtn;
 
     // Reference to the main application.
     private MainApp mainApp;
@@ -66,9 +80,21 @@ public class PersonOverviewController {
         // Clear person details.
         showPersonDetails(null);
 
+        deleteBtn.setDisable(true);
+		newBtn.setDisable(false);
+		editBtn.setDisable(true);
+		generateBtn.setDisable(true);
+        
         // Listen for selection changes and show the person details when changed.
         personTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showPersonDetails(newValue));
+        
+        // Listen for selection changes and enable the buttons.
+        personTable.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> disableBtn());
+        
+        
+        
         // Add event handler for double click on row
         personTable.setOnMouseClicked(new EventHandler<MouseEvent>(){
         	@Override
@@ -96,6 +122,8 @@ public class PersonOverviewController {
         	    }
         	}
         });//end event handler double click
+        
+        
     }
 
     /**
@@ -171,6 +199,8 @@ public class PersonOverviewController {
         boolean okClicked = mainApp.showPersonEditDialog(tempPerson);
         if (okClicked) {
             mainApp.getPersonData().add(tempPerson);
+            // automatically select the new element
+            personTable.getSelectionModel().selectLast();
         }
     }
 
@@ -245,6 +275,27 @@ public class PersonOverviewController {
             alert.setContentText("Please select a project in the table.");
             
             alert.showAndWait();
+        }
+    }
+    
+    /**
+     * disable or enable buttons based on if there is a project selected
+     */
+    @FXML
+    private void disableBtn(){
+    	ProjectUI selectedPerson = personTable.getSelectionModel().getSelectedItem();
+    	if (selectedPerson != null) {
+    		System.out.println(selectedPerson.getTitle() + " selected !");
+    		deleteBtn.setDisable(false);
+    		newBtn.setDisable(false);
+    		editBtn.setDisable(false);
+    		generateBtn.setDisable(false);
+        } else {
+        	
+        	deleteBtn.setDisable(true);
+    		newBtn.setDisable(false);
+    		editBtn.setDisable(true);
+    		generateBtn.setDisable(true);
         }
     }
 }

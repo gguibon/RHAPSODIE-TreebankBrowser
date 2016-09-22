@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -207,6 +209,7 @@ public class StaticGenerator {
 	}
 	
 	private  void creaHtmlTreesRhapsodieDirs(String dirPath) throws Exception {
+		
 		mapDirsContents = Tools.dir2map(dirPath);
 		
 		int sampleIndex = 1;
@@ -219,6 +222,7 @@ public class StaticGenerator {
 	        
 	        List<String> listFiles = (List<String>) pair.getValue();
 	        List<String[]> listFilesLocation = new ArrayList<String[]>();
+	        int i = 0;
 	        for (String filePath : listFiles){
 	        	String extension = FilenameUtils.getExtension(filePath);
 				String filename = FilenameUtils.getName(filePath);
@@ -242,7 +246,8 @@ public class StaticGenerator {
 				
 				// create the paths dirs if none
 				String p = String.format("%s%s%s%s%s", baseDirCrea, File.separatorChar, "samples",
-						File.separatorChar, "sample" + sampleIndex);
+//						File.separatorChar, "sample" + sampleIndex);
+						File.separatorChar, "files");
 				File dirFile = new File(p);
 				dirFile.mkdirs();
 				
@@ -269,17 +274,42 @@ public class StaticGenerator {
 					
 					
 					// write the conlls inside the treesModel and create the files
-					Tools.ecrire(String.format("%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename),
-							treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
-									sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name")) );
+					
+					if(i-1 < 0){
+						String nextname = FilenameUtils.getName(listFiles.get(i+1));
+						String nextpath = String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, nextname, ".html");
+						Tools.ecrire(String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename, ".html"),
+								treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
+										sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name"))
+										.replace("{previous}", "../../samples.html").replace("{next}", nextname+".html") );
+					}else if(i+1 == listFiles.size()){
+						String previousname = FilenameUtils.getName(listFiles.get(i-1));
+						String previouspath = String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, previousname, ".html");
+						Tools.ecrire(String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename, ".html"),
+								treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
+										sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name"))
+										.replace("{previous}", previousname+".html").replace("{next}", "../../samples.html") );
+					}else{
+						String nextname = FilenameUtils.getName(listFiles.get(i+1));
+						String previousname = FilenameUtils.getName(listFiles.get(i-1));
+						String nextpath = String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, nextname, ".html");
+						String previouspath = String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, previousname, ".html");
+						Tools.ecrire(String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename, ".html"),
+								treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
+										sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name"))
+										.replace("{previous}", previousname+".html").replace("{next}", nextname+".html") );
+					}
 				}
 				// add additionnal infos to a new list string[]
-				listFilesLocation.add(new String[]{filePath, p, sampleInfos.get("type")});
+				listFilesLocation.add(new String[]{filePath+".html", p, sampleInfos.get("type")});
+//				listFilesLocation.add(new String[]{filePath, String.valueOf(sampleIndex), sampleInfos.get("type")});
 				
 				// increment sampleIndex
 				if(isFile)sampleIndex++;
+				
+				// for the list index
+				i++;
 	        }
-	        
 	        mapDirsContentsLocation.put((String)pair.getKey(), listFilesLocation);
 	        
 	        
@@ -294,8 +324,8 @@ public class StaticGenerator {
 	    while (itLocation.hasNext()) {
 	        Map.Entry pair = (Map.Entry)itLocation.next();
 	        List<String[]> list = (List<String[]>)pair.getValue();
-	        for (String[] val : list)
-	        	System.out.println(pair.getKey() + " = " + val[0]  + " " + val[1]+ " "+ val[2]);
+//	        for (String[] val : list)
+//	        	System.out.println(pair.getKey() + " = " + val[0]  + " " + val[1]+ " "+ val[2]);
 	    }
 //		System.out.println("locations : \n" + mapDirsContentsLocation.toString());
 	}
@@ -377,31 +407,41 @@ public class StaticGenerator {
 		// get the number of files (and not dirs) in this directory (entry key)
         List<String[]> listFilesRoot = new ArrayList<String[]>();
         for(String[] val : listRoot){if(val[2].equals("file"))listFilesRoot.add(val);}
-        samplesView.append("<div class=\"panel-group\"><div class=\"panel panel-default\">"
+        if(listFilesRoot.size() != 0){
+        	samplesView.append("<div class=\"panel-group\"><div class=\"panel panel-default\">"
     			+ "<div class=\"panel-heading\"> "
     			+ "<button class=\"btn btn-success opacity-hover\" style=\"width:100%\" "
     			+ "data-toggle=\"collapse\" data-target=\"#collapse"+i+"\">"
     			+ "<h4 class=\"panel-title\">"+ "root"  +"</h4><span class=\"badge\">"+ listFilesRoot.size() +"</span></button></div>"
-    			+ "<div id=\"collapse"+i+"\" class=\"panel-collapse collapse\"> <div class=\"panel-body\">");
+    			+ "<div id=\"collapse"+i+"\" class=\"panel-collapse collapse in\"> <div class=\"panel-body\">");
+        }else{
+        	samplesView.append("<div class=\"panel-group\"><div class=\"panel panel-default\">"
+        			+ "<div class=\"panel-heading\"> "
+        			+ "<button class=\"btn btn-default btn-empty opacity-hover\" style=\"width:100%\" "
+        			+ "data-toggle=\"collapse\" data-target=\"#collapse"+i+"\">"
+        			+ "<h4 class=\"panel-title\">"+ "root"  +"</h4><span class=\"badge\">"+ listFilesRoot.size() +"</span></button></div>"
+        			+ "<div id=\"collapse"+i+"\" class=\"panel-collapse collapse\"> <div class=\"panel-body\">");
+        }
         for (String[] val : listRoot){
         	if(val[2].equals("file")){
         		String dirPath = val[1];
-    			if(Tools.dirFileExists(String.format("%s%s%s", dirPath, File.separatorChar, "trees.html" ) ) ){
+        		String sampleName = FilenameUtils.getName(val[0]);
+    			if(Tools.dirFileExists(String.format("%s%s%s", dirPath, File.separatorChar, sampleName ) ) ){
     				
     				// retrieve the numbers of trees for both old and new
-    				int n = Tools.countOccurrences( Tools.readFile(dirPath+ File.separatorChar +"trees.html"),"<conll>");
+    				int n = Tools.countOccurrences( Tools.readFile(dirPath+ File.separatorChar +sampleName),"<conll>");
     				int o = 0;
     				
     				// get the href content for both old and new
     				String relPath = String.format("%s%s"
     						, Tools.relativisePath(dirPath, currentDir).replace(baseDirCrea+File.separatorChar, "")
-    						, "trees.html");
+    						, sampleName);
     				
     				// get the sample name
     				final Matcher matcherNew = pattern.matcher(Tools.readFile(
     						String.format("%s%s"
     								, dirPath + File.separatorChar
-    								, "trees.html")));
+    								, sampleName)));
     				
     				if(matcherNew.find()){
     					samplesView.append(	sampleRow(o, n, "", relPath, matcherNew.group(1)) );
@@ -490,26 +530,10 @@ public class StaticGenerator {
 	private  String sampleRow(int o, int n, String oUrl, String nUrl, String sampleName ){
 		StringBuilder sb = new StringBuilder();
 		sb.append("<div class=\"row no-margin\">");
-//		 File folder = new File("/home/gael/workspacefx/RHAPSODIE-TreebankBrowser/src/resources/interface-statique/samples/img");
-//	        System.out.println( Tree.printDirectoryTree(folder) );
-//		sb.append("<li class=\"list-group-item col-xs-8 text-color-black\">"+sampleName+"</li>");
-//		if(o == 0){
-//			sb.append("<li class=\"list-group-item col-xs-2 opacity-hover\"><a class=\"btn-list btn btn-default btn-empty\"><span class=\"badge\">0</span>Old</a></li>");
-//		}else{
-//			sb.append("<li class=\"list-group-item col-xs-2 opacity-hover\"><a  href=\""+oUrl+"\" class=\"btn-list animsition-link btn btn-primary\"><span class=\"badge\">"+o+"</span>Old</a></li>");
-//		}		
-//		if(n == 0){
-//			sb.append("<li class=\"list-group-item col-xs-2 opacity-hover\"><a class=\"btn-list btn btn-default btn-empty\"><span class=\"badge\">0</span>New</a></li>");
-//		}else{
-//			sb.append("<li class=\"list-group-item col-xs-2 opacity-hover\"><a  href=\""+nUrl+"\" class=\"btn-list animsition-link btn btn-primary\"><span class=\"badge\">"+n+"</span>New</a></li>");
-//		}
-		
-		
-		
 		if(n == 0){
-			sb.append("<li class=\"list-group-item col-xs-12 opacity-hover\"><a class=\"btn-list btn btn-default btn-empty\" style=\"text-align: left; width:50%; margin-left:25%\"><span class=\"badge\">0</span>"+sampleName+"</a></li>");
+			sb.append("<li class=\"list-group-item col-xs-12 opacity-hover\"><a class=\"btn-list btn btn-default btn-empty\" style=\"text-align: left; width:50%; margin-left:25%; font-weight: bold;\"><span class=\"badge\">0</span>"+sampleName+"</a></li>");
 		}else{
-			sb.append("<li class=\"list-group-item col-xs-12 opacity-hover\"><a  href=\""+nUrl+"\" class=\"btn-list animsition-link btn btn-primary\" style=\"text-align: left; width:50%; margin-left:25%\"><span class=\"badge\">"+n+"</span>"+sampleName+"</a></li>");
+			sb.append("<li class=\"list-group-item col-xs-12 opacity-hover\"><a  href=\""+nUrl+"\" class=\"btn-list animsition-link btn btn-primary\" style=\"text-align: left; width:50%; margin-left:25%; font-weight: bold;\"><span class=\"badge\">"+n+"</span>"+sampleName+"</a></li>");
 		}
 		sb.append("</div>");
 		return sb.toString();

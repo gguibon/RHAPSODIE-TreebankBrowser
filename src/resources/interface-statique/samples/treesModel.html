@@ -2,18 +2,17 @@
 <html>
 
 <head>
-	<meta charset="utf-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<meta name="description" content=""/>
-	<meta name="author" content=""/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content=""/>
+  <meta name="author" content=""/>
 
-	<title>{title}</title>
+  <title>{title}</title>
 
-	<!-- <link rel="icon" 
-	type="image/png" 
-	href=""/> -->
-	
-	
+  <!-- <link rel="icon" 
+  type="image/png" 
+  href=""/> -->
+  
       <!-- Bootstrap Core CSS -->
       <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 
@@ -25,10 +24,13 @@
       <link href="../color/default.css" rel="stylesheet" type="text/css"/>
       <!-- animsition.css -->
       <link rel="stylesheet" href="../css/animsition.min.css">
+      <!-- pace style -->
+      <link rel="stylesheet" href="../css/pace.css">
 
       <!-- Arborator files -->
       <script src="../js/jquery.min.js"></script>
       <script type='text/javascript' src='../js/modernizr.js'></script>
+      <script type="text/javascript" src="../js/pace.min.js"></script>
       <script type="text/javascript" src="../js/raphael.js"></script>
       <script type="text/javascript" src="../js/arborator.view.js"></script>
       <script type="text/javascript" src="../js/justDrawConll.js"></script>
@@ -53,6 +55,7 @@
         <a class="navbar-brand animsition-link" href="../../samples.html">
           <img src="../img/icons/list-orange.svg" alt="" title="Samples List" class="opacity-hover"/>
         </a>
+        <span>{samplename}</span>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -68,6 +71,15 @@
   <!-- /.container -->
 </nav>
 </header>
+
+<div class="arrownav">
+  <div id="divOnLeft" style="  position: fixed; left: 50px;">
+    <a class="animsition-link " href="{previous}"><img src="../img/icons/left-arrow-key-grey.svg" class="arrownav-hover" onmouseover="this.src='../img/icons/left-arrow-key.svg';" onmouseout="this.src='../img/icons/left-arrow-key-grey.svg';" /></a>
+  </div>
+  <div id="divOnRight" style=" position: fixed; right: 50px;">
+    <a class="animsition-link " href="{next}"><img src="../img/icons/right-arrow-key-grey.svg" class="arrownav-hover" onmouseover="this.src='../img/icons/right-arrow-key.svg';" onmouseout="this.src='../img/icons/right-arrow-key-grey.svg';" /></a>
+  </div>
+  </div>
 
 <section id="main-content" style="height:100%">
  <div id="guts" style="height:100%; padding-bottom:0;" class="animsition" data-animsition-in-class="fade-in-up"
@@ -86,7 +98,7 @@
        <div class="wow fadeInDown" data-wow-delay="0.2s">
         <div class="section-heading">
          <h2 id="samplename">{samplename}</h2>
-         <i class="fa fa-2x fa-angle-down"></i>
+         <img src="../img/icons/arrow-down-grey.svg" />
 
        </div>
      </div>
@@ -96,6 +108,7 @@
 </div>
 
 <div id="treecontainer" class="container wide">
+
   <div class="row">
    <div class="col-sm-12 col-md-12">
     <div class="wow fadeInUp" data-wow-delay="0.2s">
@@ -115,7 +128,7 @@
      </div>
    </div>
  </div>
-</div><!-- /container -->		
+</div><!-- /container -->   
 </section> 
 <!-- /Section: samples -->
 </div>
@@ -129,7 +142,7 @@
 <!-- Core JavaScript Files -->
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
-<script src="../js/jquery.easing.min.js"></script>	
+<script src="../js/jquery.easing.min.js"></script>  
 <script src="../js/jquery.scrollTo.js"></script>
 <script src="../js/wow.min.js"></script>
 <script src="../js/animsition.min.js"></script>
@@ -145,7 +158,7 @@ $(document).ready(function() {
     outDuration: 800,
     linkElement: '.animsition-link',
     // e.g. linkElement: 'a:not([target="_blank"]):not([href^="#"])'
-    loading: true,
+    loading: false,
     loadingParentElement: 'body', //animsition wrapper element
     loadingClass: 'animsition-loading',
     loadingInner: '', // e.g '<img src="loading.svg" />'

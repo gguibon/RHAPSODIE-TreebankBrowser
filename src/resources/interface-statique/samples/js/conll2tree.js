@@ -100,7 +100,8 @@ function drawConll(elementConll,num) {
 
 	// inject the holder div and sentence div
 	elementConll.innerHTML = '<div class="wow fadeInLeft" data-wow-delay="0.5s">'
-	+ '<form>   <div class="input-group"> <input type="text" class="form-control" value="'+res+'#tree'+num+'" placeholder="Some path" id="copy-input'+num+'"> <span class="input-group-btn"> <button class="btn btn-primary" type="button" id="copy-button'+num+'" data-clipboard-text="'+res+'#tree'+num+'" data-toggle="tooltip" data-placement="button"  title="Copy to Clipboard"> Copy </button> </span> </div> </form>'
+	// + '<form>  <div class="input-group"> <input type="text" class="form-control" value="'+res+'#tree'+num+'" placeholder="Some path" id="copy-input'+num+'"> <span class="input-group-btn"> <button class="btn btn-primary" type="button" id="copy-button'+num+'" data-clipboard-text="'+res+'#tree'+num+'" data-toggle="tooltip" data-placement="button"  title="Copy to Clipboard"> <img src="../img/icons/clipboard.svg"/> </button> </span> </div> </form>'
+	+ '<form>  <div class="input-group"> <label id="copy-input'+num+'" for="#copy-button'+num+'">'+res+'#tree'+num+'</label>  <span class="input-group-btn"> <button class="btn btn-primary" type="button" id="copy-button'+num+'" data-clipboard-text="'+res+'#tree'+num+'" data-toggle="tooltip" data-placement="button"  title="Copy to Clipboard"> <img src="../img/icons/clipboard.svg"/> </button> </span> </div> </form>'
 	+ '<div id="tree'+num+'"><div id="sentence'+num+'" class="sentences"></div>'
 	+ '<div id="holder'+num+'" class="svgholder" style="background-color: white; overflow: auto"> </div></div>';
 

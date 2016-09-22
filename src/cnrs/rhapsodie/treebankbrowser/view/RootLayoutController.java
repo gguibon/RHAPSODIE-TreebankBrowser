@@ -1,8 +1,12 @@
 package cnrs.rhapsodie.treebankbrowser.view;
 
 import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FilenameUtils;
 
 import cnrs.rhapsodie.treebankbrowser.MainApp;
+import cnrs.rhapsodie.treebankbrowser.utils.Tools;
 import eu.hansolo.enzo.notification.Notification.Notifier;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -68,12 +72,17 @@ public class RootLayoutController {
         File personFile = mainApp.getPersonFilePath();
         if (personFile != null) {
             mainApp.savePersonDataToFile(personFile);
-            Notifier.INSTANCE.notifySuccess("Success !", "Data saved to " + personFile + " !");
+            Notifier n = Notifier.INSTANCE;
+            n.setWidth(400.00);
+            n.notifySuccess("Success !", "Data saved to \n" + personFile.getName() + " !");
         } else {
             handleSaveAs();
         }
     }
 
+    
+    
+    
     /**
      * Opens a FileChooser to let the user select a file to save to.
      */

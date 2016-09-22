@@ -1022,6 +1022,8 @@ public class Tools {
 		return list;
 	}
 	
+
+	
 	/**
 	 * walk through a directory and returns a map which contains for each key (each directory) the list of
 	 * files in it. 
@@ -1054,6 +1056,7 @@ public class Tools {
 		tuples.add(tuple);
 		if(node.isDirectory()){
 			String[] subNote = node.list();
+			Arrays.sort(subNote);
 			for(String filename : subNote){
 				dir2tuples(new File(node, filename), node.toString().replace(dirName, "root"), tuples);
 			}

@@ -96,17 +96,18 @@
 									text="Label" GridPane.columnIndex="1" GridPane.rowIndex="9" />
 								
 							</children>
+							
 						</GridPane>
 						<ButtonBar layoutX="54.0" layoutY="250.0"
 							AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
 							<buttons>
-								<Button mnemonicParsing="false" onAction="#handleGenerateUI" 
+								<Button fx:id="generateBtn" mnemonicParsing="false" onAction="#handleGenerateUI" 
 								prefHeight="33.0" prefWidth="200.0" text="Browse !" />
-								<Button mnemonicParsing="false" onAction="#handleNewPerson"
+								<Button fx:id="newBtn" mnemonicParsing="false" onAction="#handleNewPerson"
 									text="New..." />
-								<Button mnemonicParsing="false" onAction="#handleEditPerson"
+								<Button fx:id="editBtn" mnemonicParsing="false" onAction="#handleEditPerson"
 									text="Edit..." />
-								<Button minWidth="66.0" mnemonicParsing="false"
+								<Button fx:id="deleteBtn" minWidth="66.0" mnemonicParsing="false"
 									onAction="#handleDeletePerson" prefHeight="33.0" prefWidth="120.0"
 									text="Delete" />
 							</buttons>

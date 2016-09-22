@@ -25,10 +25,13 @@
       <link href="samples/color/default.css" rel="stylesheet" type="text/css"/>
       <!-- animsition.css -->
       <link rel="stylesheet" href="samples/css/animsition.min.css">
+      <!-- pace style -->
+      <link rel="stylesheet" href="samples/css/pace.css">
 
       <!-- Arborator files -->
       <script src="samples/js/jquery.min.js"></script>
       <script type='text/javascript' src='samples/js/modernizr.js'></script>
+      <script type="text/javascript" src="samples/js/pace.min.js"></script>
       <!--<script type='text/javascript' src='samples/js/dynamicpage.js'></script>-->
       <script type="text/javascript" src="samples/js/raphael.js"></script>
       <script type="text/javascript" src="samples/js/arborator.view.min.js"></script>
@@ -86,7 +89,7 @@
           <div class="wow fadeInDown" data-wow-delay="0.2s">
             <div class="section-heading">
               <h2>About</h2>
-              <i class="fa fa-2x fa-angle-down"></i>
+              <img src="samples/img/icons/arrow-down-grey.svg" />
 
             </div>
           </div>
@@ -156,6 +159,8 @@
         <br/>
         <div >Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a>, <a href="http://www.flaticon.com/authors/madebyoliver" title="Madebyoliver">Madebyoliver</a>, <a href="http://www.flaticon.com/authors/eleonor-wang" title="Eleonor Wang">Eleonor Wang</a>, <a href="http://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> and <a href="http://www.flaticon.com/authors/chanut-is-industries" title="Chanut is Industries">Chanut is Industries</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 
+       <!--  <div>Icons made by <a href="http://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div> -->
+
         &copy;Copyright 2014 - Squad. All rights reserved. <a href="http://bootstraptaste.com/">Bootstrap Themes</a> by BootstrapTaste
                     <!-- 
                         All links in the footer should remain intact. 
@@ -194,7 +199,7 @@
             outDuration: 800,
             linkElement: '.animsition-link',
     // e.g. linkElement: 'a:not([target="_blank"]):not([href^="#"])'
-    loading: true,
+    loading: false,
     loadingParentElement: 'body', //animsition wrapper element
     loadingClass: 'animsition-loading',
     loadingInner: '', // e.g '<img src="loading.svg" />'
