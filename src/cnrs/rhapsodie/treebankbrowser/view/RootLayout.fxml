@@ -6,16 +6,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane prefHeight="400.0" prefWidth="800.0" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cnrs.rhapsodie.treebankbrowser.view.RootLayoutController">
+<BorderPane prefHeight="400.0" prefWidth="900.0" stylesheets="@LightTheme.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cnrs.rhapsodie.treebankbrowser.view.RootLayoutController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#handleOpen" text="Open save file">
-                     <!-- <accelerator>
-                        <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                     </accelerator> -->
                   </MenuItem>
                   <MenuItem mnemonicParsing="false" onAction="#handleSave" text="Save">
                      <accelerator>
@@ -24,27 +21,10 @@
                   </MenuItem>
                   <MenuItem mnemonicParsing="false" onAction="#handleSaveAs" text="Save As..." />
                   <MenuItem mnemonicParsing="false" onAction="#handleNew" text="Reset configuration">
-                     <!-- <accelerator>
-                        <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                     </accelerator> -->
                   </MenuItem>
                   <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Exit" />
                </items>
           </Menu>
-          <!-- <Menu mnemonicParsing="false" text="Statistics">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#handleShowMonthStatistics" text="Departures per month" />
-              <MenuItem mnemonicParsing="false" onAction="#handleShowTeamStatistics" text="Team members" />
-              <MenuItem mnemonicParsing="false" onAction="#handleShowSupervisorStatistics" text="Supervisors' members" />
-              <MenuItem mnemonicParsing="false" onAction="#handleShowContractStatistics" text="Contracts" />
-              <MenuItem mnemonicParsing="false" onAction="#handleShowStatusStatistics" text="Status" />
-            </items>
-          </Menu> -->
-          <!-- <Menu mnemonicParsing="false" text="Trombinoscope">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#handleTrombi" text="Show Trombi !" />
-            </items>
-          </Menu> -->
           
           <Menu mnemonicParsing="false" text="Help">
             <items>

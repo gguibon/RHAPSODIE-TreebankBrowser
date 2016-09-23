@@ -1,12 +1,8 @@
 package cnrs.rhapsodie.treebankbrowser.view;
 
 import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.io.FilenameUtils;
 
 import cnrs.rhapsodie.treebankbrowser.MainApp;
-import cnrs.rhapsodie.treebankbrowser.utils.Tools;
 import eu.hansolo.enzo.notification.Notification.Notifier;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -18,7 +14,7 @@ import javafx.stage.FileChooser;
  * application layout containing a menu bar and space where other JavaFX
  * elements can be placed.
  * 
- * @author Marco Jakob
+ * @author Marco Jakob modifed by Gael Guibon
  */
 public class RootLayoutController {
 
@@ -67,7 +63,8 @@ public class RootLayoutController {
      * Saves the file to the person file that is currently open. If there is no
      * open file, the "save as" dialog is shown.
      */
-    @FXML
+    @SuppressWarnings("static-access")
+	@FXML
     private void handleSave() {
         File personFile = mainApp.getPersonFilePath();
         if (personFile != null) {
@@ -86,7 +83,8 @@ public class RootLayoutController {
     /**
      * Opens a FileChooser to let the user select a file to save to.
      */
-    @FXML
+    @SuppressWarnings("static-access")
+	@FXML
     private void handleSaveAs() {
         FileChooser fileChooser = new FileChooser();
 
@@ -104,7 +102,9 @@ public class RootLayoutController {
                 file = new File(file.getPath() + ".xml");
             }
             mainApp.savePersonDataToFile(file);
-            Notifier.INSTANCE.notifySuccess("Success !", "Data saved to " + file.getPath() + " !");
+            Notifier n = Notifier.INSTANCE;
+            n.setWidth(400.00);
+            n.notifySuccess("Success !", "Data saved to \n" + file.getName() + " !");
         }
     }
     
@@ -120,7 +120,7 @@ public class RootLayoutController {
     	alert.setContentText("Author: Gaël Guibon\n\ngael.guibon@lsis.org\n"
     			+ "gael.guibon@gmail.com\n\n"
     			+ "http://www.lsis.org\n\n"
-    			+ "Kim Gerdes\n\nkim.gerdes@univ-paris3.fr"
+    			+ "Kim Gerdes\n\nkim.gerdes@univ-paris3.fr\n\n"
     			+ "Upgrading MarkJacob's example");    	
     	
     	alert.showAndWait();

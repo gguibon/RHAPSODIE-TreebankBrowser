@@ -1104,9 +1104,14 @@ margin-bottom: -1px;
 -webkit-transition: all 0.4s ease-in-out;
 }
 .arrownav-hover:hover {
-  opacity:0.5;
+  opacity:0.8;
   transform: scale(3);
 transition: all 0.2s ease-in-out;
 -webkit-transition: all 0.2s ease-in-out;
+}
+
+.shrink {
+  transition: all 0.4s ease-in-out;
+-webkit-transition: all 0.4s ease-in-out;
 }
 /**/

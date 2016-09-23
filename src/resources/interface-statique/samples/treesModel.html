@@ -74,10 +74,10 @@
 
 <div class="arrownav">
   <div id="divOnLeft" style="  position: fixed; left: 50px;">
-    <a class="animsition-link " href="{previous}"><img src="../img/icons/left-arrow-key-grey.svg" class="arrownav-hover" onmouseover="this.src='../img/icons/left-arrow-key.svg';" onmouseout="this.src='../img/icons/left-arrow-key-grey.svg';" /></a>
+    <a class="animsition-link " href="{previous}"><img src="../img/icons/left-arrow-key-grey.svg" class="arrownav-hover" onmouseover="this.src='../img/icons/left-arrow-key.svg';" onmouseout="$(this).addClass('shrink');   this.src='../img/icons/left-arrow-key-grey.svg'; $(this).addClass(arrownav-hover);" /></a>
   </div>
   <div id="divOnRight" style=" position: fixed; right: 50px;">
-    <a class="animsition-link " href="{next}"><img src="../img/icons/right-arrow-key-grey.svg" class="arrownav-hover" onmouseover="this.src='../img/icons/right-arrow-key.svg';" onmouseout="this.src='../img/icons/right-arrow-key-grey.svg';" /></a>
+    <a class="animsition-link " href="{next}"><img src="../img/icons/right-arrow-key-grey.svg" class="arrownav-hover" onmouseover="this.src='../img/icons/right-arrow-key.svg';" onmouseout="$(this).addClass('shrink');   this.src='../img/icons/right-arrow-key-grey.svg'; $(this).addClass(arrownav-hover);" /></a>
   </div>
   </div>
 

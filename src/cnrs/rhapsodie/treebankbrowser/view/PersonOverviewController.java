@@ -285,7 +285,6 @@ public class PersonOverviewController {
     private void disableBtn(){
     	ProjectUI selectedPerson = personTable.getSelectionModel().getSelectedItem();
     	if (selectedPerson != null) {
-    		System.out.println(selectedPerson.getTitle() + " selected !");
     		deleteBtn.setDisable(false);
     		newBtn.setDisable(false);
     		editBtn.setDisable(false);

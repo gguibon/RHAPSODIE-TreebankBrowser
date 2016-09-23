@@ -2,23 +2,11 @@ package cnrs.rhapsodie.treebankbrowser;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.prefs.Preferences;
-import java.util.regex.Pattern;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-
-import org.apache.commons.io.FilenameUtils;
 
 import cnrs.rhapsodie.treebankbrowser.model.PersonListWrapper;
 import cnrs.rhapsodie.treebankbrowser.model.ProjectUI;
@@ -43,7 +31,6 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
-    private static String dirName;
     
     /**
      * The data as an observable list of Persons.
@@ -73,7 +60,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("AddressApp");
+        this.primaryStage.setTitle("TreebankBrowser");
         
         // Set the application icon.
 //        this.primaryStage.getIcons().add(new Image("file:/resources/images/address_book_32.png"));
@@ -81,10 +68,10 @@ public class MainApp extends Application {
         Image img = new Image(MainApp.class.getResourceAsStream(
 //        		String.format("%s%s%s%s%s%s", File.separatorChar, "resources", File.separatorChar,
 //        				"images", File.separatorChar, "address_book_32.png")));
-        				"/resources/images/address_book_32.png"));
+        				"/resources/images/logo-app.png"));
         this.primaryStage.getIcons().add(img);
 
-        this.primaryStage.setMaximized(true);
+        this.primaryStage.setMaximized(false);
         
         initRootLayout();
 

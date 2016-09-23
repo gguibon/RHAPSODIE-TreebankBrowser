@@ -27,10 +27,7 @@
 								<TableColumn fx:id="titleColumn" prefWidth="75.0"
 									text="Title" />
 								<TableColumn fx:id="authorColumn" prefWidth="75.0"
-									text="Author" />
-								<!-- <TableColumn fx:id="projectHtmlColumn" prefWidth="75.0"
-									text="Project Description" /> -->
-								
+									text="Author" />								
 							</columns>
 							<columnResizePolicy>
 								<TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
@@ -104,9 +101,9 @@
 								<Button fx:id="generateBtn" mnemonicParsing="false" onAction="#handleGenerateUI" 
 								prefHeight="33.0" prefWidth="200.0" text="Browse !" />
 								<Button fx:id="newBtn" mnemonicParsing="false" onAction="#handleNewPerson"
-									text="New..." />
+									text="New" />
 								<Button fx:id="editBtn" mnemonicParsing="false" onAction="#handleEditPerson"
-									text="Edit..." />
+									text="Edit" />
 								<Button fx:id="deleteBtn" minWidth="66.0" mnemonicParsing="false"
 									onAction="#handleDeletePerson" prefHeight="33.0" prefWidth="120.0"
 									text="Delete" />
