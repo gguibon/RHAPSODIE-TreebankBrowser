@@ -159,27 +159,27 @@ public class PersonEditDialogController {
         if (titleField.getText() == null || titleField.getText().length() == 0) {
             errorMessage += "No valid title!\n"; 
         }
-        if (subtitleField.getText() == null || subtitleField.getText().length() == 0) {
-            errorMessage += "No valid subtitle!\n"; 
-        }
-        if (licenceTitleField.getText() == null || licenceTitleField.getText().length() == 0) {
-            errorMessage += "No valid licenceTitle!\n"; 
-        }
-        if (licenceHtmlField.getText() == null || licenceHtmlField.getText().length() == 0) {
-            errorMessage += "No valid licenceHtml!\n"; 
-        }
-        if (projectTitleField.getText() == null || projectTitleField.getText().length() == 0) {
-            errorMessage += "No valid projectTitle!\n"; 
-        }
-        if (projectHtmlField.getText() == null || projectHtmlField.getText().length() == 0) {
-            errorMessage += "No valid projectHtml!\n"; 
-        }
+//        if (subtitleField.getText() == null || subtitleField.getText().length() == 0) {
+//            errorMessage += "No valid subtitle!\n"; 
+//        }
+//        if (licenceTitleField.getText() == null || licenceTitleField.getText().length() == 0) {
+//            errorMessage += "No valid licenceTitle!\n"; 
+//        }
+//        if (licenceHtmlField.getText() == null || licenceHtmlField.getText().length() == 0) {
+//            errorMessage += "No valid licenceHtml!\n"; 
+//        }
+//        if (projectTitleField.getText() == null || projectTitleField.getText().length() == 0) {
+//            errorMessage += "No valid projectTitle!\n"; 
+//        }
+//        if (projectHtmlField.getText() == null || projectHtmlField.getText().length() == 0) {
+//            errorMessage += "No valid projectHtml!\n"; 
+//        }
         if (rawDirField.getText() == null || rawDirField.getText().length() == 0) {
             errorMessage += "No valid rawDir!\n"; 
         }
-        if (authorField.getText() == null || authorField.getText().length() == 0) {
-            errorMessage += "No valid author!\n"; 
-        }
+//        if (authorField.getText() == null || authorField.getText().length() == 0) {
+//            errorMessage += "No valid author!\n"; 
+//        }
         
 //        else {
 //            // try to parse the postal code into an int.

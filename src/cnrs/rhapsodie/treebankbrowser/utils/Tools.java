@@ -1058,7 +1058,11 @@ public class Tools {
 			String[] subNote = node.list();
 			Arrays.sort(subNote);
 			for(String filename : subNote){
-				dir2tuples(new File(node, filename), node.toString().replace(dirName, "root"), tuples);
+				if(node.toString().equals(dirName)){
+					dir2tuples(new File(node, filename), node.toString().replace(dirName, "root"), tuples);
+				}else{
+					dir2tuples(new File(node, filename), node.toString().replace(dirName+File.separator, ""), tuples);
+				}
 			}
 		}
 	}

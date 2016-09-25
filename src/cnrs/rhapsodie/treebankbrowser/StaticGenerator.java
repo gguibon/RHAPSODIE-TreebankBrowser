@@ -48,14 +48,14 @@ public class StaticGenerator {
 	public void generateStaticInterface(String title, String subtitle, 
 			String projectTitle, String projectHtml, String licenceTitle, String licenceHtml
 			, String rawDir) throws Exception{
-		if(title.length()!=0)this.title = title;
-		if(subtitle.length()!=0)this.subtitle = subtitle;
-		if(projectTitle.length()!=0)this.projectTitle = projectTitle;
-		if(projectHtml.length()!=0)this.projectHtml = projectHtml;
-		if(licenceTitle.length()!=0)this.licenceTitle = licenceTitle;
-		if(licenceHtml.length()!=0)this.licenceHtml = licenceHtml;
+		this.title = title;
+		this.subtitle = subtitle;
+		this.projectTitle = projectTitle;
+		this.projectHtml = projectHtml;
+		this.licenceTitle = licenceTitle;
+		this.licenceHtml = licenceHtml;
 		
-		if(rawDir.length()!=0)this.rawDir = rawDir;
+		this.rawDir = rawDir;
 		
 		mapDirsContents.clear();
 		mapDirsContentsLocation.clear();
@@ -216,7 +216,7 @@ public class StaticGenerator {
 		Iterator it = mapDirsContents.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry pair = (Map.Entry)it.next();
-	        System.out.println(pair.getKey() + " = " + pair.getValue());
+//	        System.out.println(pair.getKey() + " = " + pair.getValue());
 	        it.remove(); // avoids a ConcurrentModificationException
 	        
 	        
@@ -246,15 +246,15 @@ public class StaticGenerator {
 				
 				// create the paths dirs if none
 				String p = String.format("%s%s%s%s%s", baseDirCrea, File.separatorChar, "samples",
-//						File.separatorChar, "sample" + sampleIndex);
-						File.separatorChar, "files");
+						File.separatorChar, "sample" + sampleIndex);
+//						File.separatorChar, "files");
 				File dirFile = new File(p);
 				dirFile.mkdirs();
 				
 				if(isFile){
 					// get conll content into a sb
 					StringBuilder sbNew = new StringBuilder();
-					sbNew.append( Tools.readFile(filePath) + "\n");
+					sbNew.append( Tools.readFile(filePath));
 					
 					// get the treesModel content
 					Tools tool = new Tools();
@@ -276,24 +276,20 @@ public class StaticGenerator {
 					// write the conlls inside the treesModel and create the files
 					
 					if(i-1 < 0){
-						String nextname = FilenameUtils.getName(listFiles.get(i+1));
-						String nextpath = String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, nextname, ".html");
+						String nextname = ".."+File.separator+"sample"+(sampleIndex+1) + File.separator +FilenameUtils.getName(listFiles.get(i+1));
 						Tools.ecrire(String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename, ".html"),
 								treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
 										sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name"))
 										.replace("{previous}", "../../samples.html").replace("{next}", nextname+".html") );
 					}else if(i+1 == listFiles.size()){
-						String previousname = FilenameUtils.getName(listFiles.get(i-1));
-						String previouspath = String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, previousname, ".html");
+						String previousname = ".."+File.separator+"sample"+(sampleIndex-1) + File.separator + FilenameUtils.getName(listFiles.get(i-1));
 						Tools.ecrire(String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename, ".html"),
 								treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
 										sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name"))
 										.replace("{previous}", previousname+".html").replace("{next}", "../../samples.html") );
 					}else{
-						String nextname = FilenameUtils.getName(listFiles.get(i+1));
-						String previousname = FilenameUtils.getName(listFiles.get(i-1));
-						String nextpath = String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, nextname, ".html");
-						String previouspath = String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, previousname, ".html");
+						String nextname = ".."+File.separator+"sample"+(sampleIndex+1) + File.separator +FilenameUtils.getName(listFiles.get(i+1));
+						String previousname = ".."+File.separator+"sample"+(sampleIndex-1) + File.separator +FilenameUtils.getName(listFiles.get(i-1));
 						Tools.ecrire(String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename, ".html"),
 								treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
 										sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name"))
@@ -454,14 +450,14 @@ public class StaticGenerator {
         	}
         }
         samplesView.append("</div> </div> </div> </div>");
-        
+        i++;
 		
 		// iterate through the map
 		Iterator itLocation = mapDirsContentsLocation.entrySet().iterator();
 	    while (itLocation.hasNext()) {
 	        Map.Entry pair = (Map.Entry)itLocation.next();
-	        // avoid the "root" entry
-	    	if(pair.getKey().equals("root")){continue;}
+	        // avoid the "root" entry and the absolute dir
+	    	if((pair.getKey().equals("root"))||(pair.getKey().equals(rawDir))){continue;}
 	        List<String[]> list = (List<String[]>)pair.getValue();
 	        // get the number of files (and not dirs) in this directory (entry key)
 	        List<String[]> listFiles = new ArrayList<String[]>();
@@ -569,10 +565,14 @@ public class StaticGenerator {
 	 * @param toInsert
 	 */
 	private  void replaceInFile(String filePath, String toReplace, String toInsert){
-		String content;
+		String content = "";
 		try {
 			content = Tools.readFile(filePath);
-			content = content.replace(toReplace, toInsert);
+			if((toInsert!=null)&&(toInsert.length()!=0)){
+				content = content.replace(toReplace, toInsert);
+			}else{
+				content = content.replace(toReplace, "");
+			}
 			Tools.ecrire(filePath, content);
 		} catch (IOException e) {
 			e.printStackTrace();

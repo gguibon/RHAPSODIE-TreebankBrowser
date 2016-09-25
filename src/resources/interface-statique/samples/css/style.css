@@ -1115,3 +1115,56 @@ transition: all 0.2s ease-in-out;
 -webkit-transition: all 0.4s ease-in-out;
 }
 /**/
+
+/* css to enable and manage animations on tree load */
+/*not to show the not parsed yet conll tag contents*/
+conll { font-size:0; }
+
+label {font-size:12px !important;}
+div.new {
+          opacity: 0;
+        }
+        div.fade {
+    -webkit-animation: fadeInLeft 1s;
+    animation: fadeInLeft 1s;
+    opacity: 1;
+ }
+  /* -fail- */
+  @-webkit-keyframes fade {
+      from {opacity: 0}
+      to {opacity: 1}
+  }@keyframes fade {
+      from {opacity: 0}
+      to {opacity: 1}
+  }
+
+  @-webkit-keyframes fadeInLeft {
+    0% {
+      opacity: 0;
+      -webkit-transform: translateX(-20px);
+      transform: translateX(-20px);
+    }
+
+    100% {
+      opacity: 1;
+      -webkit-transform: translateX(0);
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fadeInLeft {
+    0% {
+      opacity: 0;
+      -webkit-transform: translateX(-20px);
+      -ms-transform: translateX(-20px);
+      transform: translateX(-20px);
+    }
+
+    100% {
+      opacity: 1;
+      -webkit-transform: translateX(0);
+      -ms-transform: translateX(0);
+      transform: translateX(0);
+    }
+  }
+/**/
