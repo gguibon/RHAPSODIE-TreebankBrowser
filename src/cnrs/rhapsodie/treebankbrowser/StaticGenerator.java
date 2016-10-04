@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -276,11 +277,22 @@ public class StaticGenerator {
 					// write the conlls inside the treesModel and create the files
 					
 					if(i-1 < 0){
-						String nextname = ".."+File.separator+"sample"+(sampleIndex+1) + File.separator +FilenameUtils.getName(listFiles.get(i+1));
+						String nextname = "";
+						// check if there actually is a next name, or if this is a file alone
+						if(i+1 == listFiles.size()){
+							nextname = "#";
+							Tools.ecrire(String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename, ".html"),
+									treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
+											sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name"))
+											.replace("{previous}", "../../samples.html").replace("{next}", "../../samples.html") );
+						}else{
+						nextname = ".."+File.separator+"sample"+(sampleIndex+1) + File.separator +FilenameUtils.getName(listFiles.get(i+1));
 						Tools.ecrire(String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename, ".html"),
 								treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
 										sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name"))
 										.replace("{previous}", "../../samples.html").replace("{next}", nextname+".html") );
+						}
+						
 					}else if(i+1 == listFiles.size()){
 						String previousname = ".."+File.separator+"sample"+(sampleIndex-1) + File.separator + FilenameUtils.getName(listFiles.get(i-1));
 						Tools.ecrire(String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename, ".html"),
@@ -617,7 +629,9 @@ public class StaticGenerator {
 	}
 	
 	
-	private  void openIt(String path) {
+	private  void openIt(String path) throws URISyntaxException {
+//		DesktopApi.browse(new URI("file://" + path));
+		
 		if (OsValidator.isWindows()) {
 			System.out.println("This is Windows");
 

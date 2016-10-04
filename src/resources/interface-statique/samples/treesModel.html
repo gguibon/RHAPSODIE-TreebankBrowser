@@ -26,6 +26,8 @@
       <link rel="stylesheet" href="../css/animsition.min.css">
       <!-- pace style -->
       <link rel="stylesheet" href="../css/pace.css">
+            <!-- bootstrap-switch css -->
+      <link href="../css/bootstrap-switch.min.css" rel="stylesheet">
 
       <!-- Arborator files -->
       <script src="../js/jquery.min.js"></script>
@@ -40,6 +42,7 @@
     </head>
 
     <body id="page-top" data-spy="scroll" data-target=".navbar-custom" class="bg-dark">
+      <div id="loading"></div>
      <div id="page-wrap">
       
 <!-- The actual snackbar -->
@@ -78,6 +81,12 @@
   </div>
   <div id="divOnRight" style=" position: fixed; right: 50px;">
     <a class="animsition-link " href="{next}"><img src="../img/icons/right-arrow-key-grey.svg" class="arrownav-hover" onmouseover="this.src='../img/icons/right-arrow-key.svg';" onmouseout="$(this).addClass('shrink');   this.src='../img/icons/right-arrow-key-grey.svg'; $(this).addClass(arrownav-hover);" /></a>
+  </div>
+  <div id="divOnRightBottom" style=" position: fixed; right: 65px; bottom: 50px;">
+    <button type="button" class="btn btn-success opacity-hover" id="loader">Speed Up!</button>
+  </div>
+  <div id="divOnRightBottom2" style=" position: fixed; right: 200px; bottom: 50px;">
+    <input class="opacity-hover" type="checkbox" name="my-checkbox" checked data-size="normal" data-on-color="primary" data-off-color="danger" data-on-text="Timer" data-off-text="Scroll" data-label-text="Auto Load" data-handle-width="200">
   </div>
   </div>
 
@@ -149,6 +158,7 @@
 <!-- Custom Theme JavaScript -->
 <script src="../js/custom.js"></script>
 <script src="../js/clipboard.min.js"></script>
+<script src="../js/bootstrap-switch.min.js"></script>
     <script>
 $(document).ready(function() {
   $(".animsition").animsition({
@@ -174,6 +184,9 @@ $(document).ready(function() {
     transition: function(url){ window.location.href = url; }
   });
 });
+
+$("[name='my-checkbox']").bootstrapSwitch();
+
 </script>
 </body>
 

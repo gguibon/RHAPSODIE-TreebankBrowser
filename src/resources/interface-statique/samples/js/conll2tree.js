@@ -11,15 +11,17 @@ Requires arborator files in the header of the HTML page:
 **/
 
 //auto launch drawConllTag on every conll tags.
+var index = 0;
+var autoload = true;
 $(document).ready(function(){
 
 	var height = $(window).height();
-	var index = 0;
+	
 	var n = 1;
 	var nbPreloadTrees = 3;
 	if(height > 1500){nbPreloadTrees = 5}
 	if(height > 2400){nbPreloadTrees = 10}
-	// var list = document.getElementsByTagName("conll");
+	var list = document.getElementsByTagName("conll");
 	// for (var i = index;i < index+nbPreloadTrees;i++){
 	//            drawConll1(list[i],i+1);
 	// 			var script = 'clipboard('+(i+1)+');';
@@ -35,24 +37,24 @@ $(document).ready(function(){
 	// }
 	// index = index + nbPreloadTrees;
 
-// $(window).scroll(function() {
-//   if (nearBottomOfPage()) {
-//    			for (var i = index;i < index+n;i++){
-//         		drawConll(list[i],i+1);
-// 				var script = 'clipboard('+(i+1)+');';
-// 				// execScript(script);
-// 				var clipboard = new Clipboard('.btn');
-// 				clipboard.on('success', function(e) {
-// 					// console.log(e.textw);
-// 					myFunction()
-// 				});
-// 				clipboard.on('error', function(e) {
-// 					console.log(e);
-// 				});
-// 			}
-// 			index = index + n;
-//   } 
-// });
+$(window).scroll(function() {
+  if (nearBottomOfPage() && autoload == false) {
+   			for (var i = index;i < index+n;i++){
+        		drawConll(list[i],i+1);
+				var script = 'clipboard('+(i+1)+');';
+				// execScript(script);
+				var clipboard = new Clipboard('.btn');
+				clipboard.on('success', function(e) {
+					// console.log(e.textw);
+					myFunction()
+				});
+				clipboard.on('error', function(e) {
+					console.log(e);
+				});
+			}
+			index = index + n;
+  } 
+});
 
 function nearBottomOfPage() {
   return scrollDistanceFromBottom() < 150;
@@ -66,8 +68,7 @@ function pageHeight() {
   return Math.max(document.body.scrollHeight, document.body.offsetHeight);
 }
 
-
-performTask(
+loadTreesBackground(
     // A set of items.
     // list,
     // Process two items every iteration.
@@ -93,6 +94,20 @@ performTask(
 // }
 );
 
+// loadAllTrees(1);
+
+$('#loader').click(function(){
+	var list = document.getElementsByTagName("conll");
+    if(index < list.length)
+    	loadAllTrees(1);
+});
+
+
+$('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
+	autoload = state;
+	if(autoload == true)
+		loadTreesBackground(1);
+});
 
 
 var inactivityTime = function () {
@@ -243,7 +258,7 @@ function drawConll1(elementConll,num) {
 
 	// inject the holder div and sentence div
 	elementConll.innerHTML = '<div class="wow fadeInLeft" >'//data-wow-delay="0.5s">'
-	+ '<form>  <div class="input-group"> <label id="copy-input'+num+'" for="#copy-button'+num+'" style="font-size: 12;">'+res+'#tree'+num+'</label>  <span class="input-group-btn"> <button class="btn btn-primary" type="button" id="copy-button'+num+'" data-clipboard-text="'+res+'#tree'+num+'" data-toggle="tooltip" data-placement="button"  title="Copy to Clipboard"> <img src="../img/icons/clipboard.svg"/> </button> </span> </div> </form>'
+	+ '<form>  <div class="input-group"> <label id="copy-input'+num+'" for="#copy-button'+num+'" style="font-size: 12;">'+res+'#tree'+num+'</label>  <span class="input-group-btn"> <button class="btn btn-primary opacity-hover" type="button" id="copy-button'+num+'" data-clipboard-text="'+res+'#tree'+num+'" data-toggle="tooltip" data-placement="button"  title="Copy to Clipboard"> <img src="../img/icons/clipboard.svg"/> </button> </span> </div> </form>'
 	+ '<div id="tree'+num+'"><div id="sentence'+num+'" class="sentences"></div>'
 	+ '<div id="holder'+num+'" class="svgholder" style="background-color: white; overflow: auto"> </div></div>';
 
@@ -272,7 +287,7 @@ function drawConll(elementConll,num) {
 
 	div = document.createElement('div');
 	// div.id = 'newdiv'+num;
-	div.innerHTML = '<form>  <div class="input-group"> <span class="input-group-btn"> <button class="btn btn-success" style="border-radius:50%" type="button" id="num-button'+num+'"  data-toggle="tooltip" data-placement="button"  title="This sentence\'s number"> <strong>'+num+' / '+nbMaxSent+'</strong> </button> </span> <label id="copy-input'+num+'" for="#copy-button'+num+'">'+res+'#tree'+num+'</label>  <span class="input-group-btn"> <button class="btn btn-primary" type="button" id="copy-button'+num+'" data-clipboard-text="'+res+'#tree'+num+'" data-toggle="tooltip" data-placement="button"  title="Copy to Clipboard"> <img src="../img/icons/clipboard.svg"/> </button> </span> </div> </form>'
+	div.innerHTML = '<form>  <div class="input-group"> <span class="input-group-btn"> <button class="btn btn-success" style="border-radius:50%" type="button" id="num-button'+num+'"  data-toggle="tooltip" data-placement="button"  title="This sentence\'s number"> <strong>'+num+' / '+nbMaxSent+'</strong> </button> </span> <label id="copy-input'+num+'" for="#copy-button'+num+'">'+res+'#tree'+num+'</label>  <span class="input-group-btn"> <button class="btn btn-primary opacity-hover" type="button" id="copy-button'+num+'" data-clipboard-text="'+res+'#tree'+num+'" data-toggle="tooltip" data-placement="button"  title="Copy to Clipboard"> <img src="../img/icons/clipboard.svg"/> </button> </span> </div> </form>'
 		+ '<div id="tree'+num+'"><div id="sentence'+num+'" class="sentences"></div>'
 		+ '<div id="holder'+num+'" class="svgholder" style="background-color: white; overflow: auto"> </div>';
 		div.className = "new";
@@ -334,16 +349,24 @@ function myFunction() {
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 }
 
-function performTask(numToProcess) {
-    var pos = 0;
+/*
+the background task to directly load every trees, show the progress, and do not let the user access the trees until they are fully loaded
+*/
+function loadAllTrees(numToProcess) {
+    //var pos = 0;
     var list = document.getElementsByTagName("conll");
+    var body = document.body;
+	body.className += " hiddenoverflow";
+	document.getElementById('loading').style.display = 'block';
+	var stop = false;
+
     // This is run once for every numToProcess items.
     function iteration() {
 
         // Calculate last position.
-        var j = Math.min(pos + numToProcess, list.length);
+        var j = Math.min(index + numToProcess, list.length);
         // Start at current position and loop to last position.
-        for (var i = pos; i < j; i++) {
+        for (var i = index; i < j; i++) {
    //          // processItem(items, i);
             
             drawConll(list[i],i+1);
@@ -357,19 +380,79 @@ function performTask(numToProcess) {
 			clipboard.on('error', function(e) {
 				console.log(e);
 			});
-			// inactivityTime();
+			// update the current content
+			var percentProgress = (i/list.length)*100;
+			document.getElementById("loading").innerHTML = ""
+			//+ "<h1 class='overlay-content' style='color:white'>"+i+" / "+list.length+"</h1>"
+			+ "<div class='progress overlay-content' >  <div class='progress-bar progress-bar-success progress-bar-striped active' role='progressbar' aria-valuenow='"+percentProgress+"'  aria-valuemin='0' aria-valuemax='100' style='width:"+percentProgress+"%''>"
+			+ " <span style='font-size:22px;'>"+Math.floor(percentProgress)+"% </span>   </div></div>"
+			+ "<div  class='overlay-content' > <button type='button' class='btn btn-danger' id='loaderstop'>Stop!</button>  </div>"
+				;
+				//style=' position: fixed; right: 65px; bottom: 50px;'
         }
         // Increment current position.
-        pos += numToProcess;
-        console.log(pos);
+        index += numToProcess;
+        console.log(index);
         // Only continue if there are more items to process.
-        if (pos < list.length)
-            setTimeout(iteration, 1500); // Wait 10 ms to let the UI update.
+        if (index < list.length && stop == false)
+            setTimeout(iteration, 10); // Wait 10 ms to let the UI update.
+
+        if (index == list.length){
+        	body.className = "";
+        	document.getElementById('loading').style.display = 'none';
+        }
+         $('#loaderstop').click(function(){
+        	var list = document.getElementsByTagName("conll");
+        	stop = true;
+        	body.className = "";
+        	document.getElementById('loading').style.display = 'none';
+        	return;
+    });
+
     }
+   
     iteration();
 
 
 }
+
+
+/*
+the background task for loading trees while leaving the user control of the interface
+*/
+function loadTreesBackground(numToProcess) {
+    // var pos = 0;
+    var list = document.getElementsByTagName("conll");
+    // This is run once for every numToProcess items.
+    function iteration() {
+
+        // Calculate last position.
+        var j = Math.min(index + numToProcess, list.length);
+        // Start at current position and loop to last position.
+        for (var i = index; i < j; i++) {
+            
+            drawConll(list[i],i+1);
+			var script = 'clipboard('+(i+1)+');';
+			// execScript(script);
+			var clipboard = new Clipboard('.btn');
+			clipboard.on('success', function(e) {
+				// console.log(e.textw);
+				myFunction()
+			});
+			clipboard.on('error', function(e) {
+				console.log(e);
+			});
+        }
+        // Increment current position.
+        index += numToProcess;
+        console.log(index);
+        // Only continue if there are more items to process.
+        if (index < list.length && autoload == true)
+            setTimeout(iteration, 1500); // Wait 10 ms to let the UI update.
+    }
+    iteration();
+}
+
 
 var inactivityTime = function () {
     var t;
@@ -397,3 +480,4 @@ var inactivityTime = function () {
         // 1000 milisec = 1 sec
     }
 };
+
