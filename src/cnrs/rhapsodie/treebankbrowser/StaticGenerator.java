@@ -66,148 +66,148 @@ public class StaticGenerator {
 		creaHtmlTreesRhapsodieDirs(this.rawDir);
 //		adaptSampleView();
 		adaptSampleViewWithDirs();
-		File index = new File(baseDirCrea+ File.separatorChar +"index.html");
+		File index = new File(baseDirCrea+ File.separatorChar +"samples.html");
 		openIt(index.getAbsolutePath());
 //		((JavascriptExecutor)this.webDriver).executeScript("alert('Test')");
 //		this.webDriver.switchTo().alert().accept();
 	}
 
 	
-	private  void creaHtmlTrees(String dirPath) throws Exception {
-		List<String> listDirs = Tools.listDirs(dirPath);
-		int sampleIndex = 1;
-		for(String dir : listDirs){
-			//initiate each raw dir
-			File dirOld = new File(String.format("%s%s%s%s%s", dirPath, File.separatorChar, dir, File.separatorChar, "old" ));
-			File dirNew = new File(String.format("%s%s%s%s%s", dirPath, File.separatorChar, dir, File.separatorChar, "new" ));
-			// get sample informations sample.info
-			HashMap<String, String> sampleInfos = getSampleInfos(String.format("%s%s%s%s%s", dirPath, File.separatorChar, dir
-					, File.separatorChar, "sample.info"));
-			// get content of files in each dir
-			List<String> oldPaths = Tools.dir2listepaths(dirOld.getAbsolutePath());
-			List<String> newPaths = Tools.dir2listepaths(dirNew.getAbsolutePath());
-			StringBuilder sbOld = new StringBuilder();
-			StringBuilder sbNew = new StringBuilder();
-			for(String path : oldPaths) sbOld.append( Tools.readFile(path) + "\n" );
-			for(String path : newPaths) sbNew.append( Tools.readFile(path) + "\n");
-			// create the paths dirs if none
-			File dirFile = new File ( String.format("%s%s%s%s%s", baseDirCrea, File.separatorChar
-					, "samples", File.separatorChar, "sample"+sampleIndex ) );
-			dirFile.mkdirs();
-			
-			// merge the html contents for each tree html
-//			String treesModel = Tools.readFile( String.format("%s%s%s%s%s", 
-//					StaticGenerator.class.getResource("/resources/interface-statique").toExternalForm()
-////					baseDir
-//					, File.separatorChar, "samples", File.separatorChar , "treesModel.html" ) );
-//			String treesModel = StaticGenerator.class.getResourceAsStream("/resources/interface-statique/samples/treesModel.html");
-			Tools tool = new Tools();
-//			String treesModel = tool.accessRessourceFile("/resources/interface-statique/samples/treesModel.html");
-			String treesModel = tool.accessRessourceFile(String.format("%s%s%s%s%s%s%s%s", File.separatorChar
-					, "resources", File.separatorChar, "interface-statique",
-					File.separatorChar, "samples" , File.separatorChar, "treesModel.html"));
-			List<String> sentOld = Corpus.getSentences(Tools.tempFile("old", ".txt", sbOld.toString()));
-			StringBuilder sbOldMerged = new StringBuilder();
-			for (String sent : sentOld){
-				sbOldMerged.append(String.format("%s%s%s\n", "<conll>", 
-					Tools.replaceLastOccurrence(sent, "\n", "") , "</conll>") );
-			}
-			List<String> sentNew = Corpus.getSentences(Tools.tempFile("new", ".txt", sbNew.toString()));
-			StringBuilder sbNewMerged = new StringBuilder();
-			for (String sent : sentNew){
-				sbNewMerged.append(String.format("%s%s%s\n", "<conll>",
-						Tools.replaceLastOccurrence(sent, "\n", "") , "</conll>") );
-			}
-			// write the conlls inside the treesModel and create the files
-			Tools.ecrire( String.format("%s%s%s", dirFile.getAbsolutePath(), File.separatorChar
-					, "oldTrees.html") , treesModel.replace("{conlls}", sbOldMerged)
-								.replace("{samplename}", sampleInfos.get("sample name")));
-			Tools.ecrire( String.format("%s%s%s", dirFile.getAbsolutePath(), File.separatorChar
-					, "trees.html") , treesModel.replace("{conlls}", sbNewMerged)
-								.replace("{samplename}", sampleInfos.get("sample name")));
-			
-			sampleIndex++;
-		}
-	}
-	
-	
-	private  void creaHtmlTreesRhapsodie(String dirPath) throws Exception {
-		List<String> listFiles = new ArrayList<String>();
-		Tools.listFilesAndSubfiles(dirPath, listFiles);
-		int sampleIndex = 1;
-		for (String filePath : listFiles){
-			
-			String extension = FilenameUtils.getExtension(filePath);
-			String filename = FilenameUtils.getName(filePath);
-			String filebasename = FilenameUtils.getBaseName(filePath);
-			
-			// get the sample name from the file name
-			HashMap<String, String> sampleInfos = new HashMap<String, String>();
-			
-			System.out.println("PATH " + File.separator + dirPath + File.separator  + filename);
-			
-			if(filePath.equals(dirPath + File.separator  + filename)){
-				System.out.println("equal");
-				sampleInfos.put("sample name", filename);
-			}else{
-				System.out.println("not equal");
-				String tree = filePath.replace(dirPath+File.separator, "|");
-				tree = tree.replaceAll("/", "<br/>|-----");
-				sampleInfos.put("sample name", tree);
-			}
-			
-			StringBuilder sbOld = new StringBuilder();
-			StringBuilder sbNew = new StringBuilder();
-			
-			
-			String oldVersion = filePath.replace(filename, filebasename)+"_old."+extension;
-			
-			if(Tools.dirFileExists(oldVersion)) sbOld.append( Tools.readFile(oldVersion) + "\n" );
-			sbNew.append( Tools.readFile(filePath) + "\n");
-			
-			// create the paths dirs if none
-			File dirFile = new File(String.format("%s%s%s%s%s", baseDirCrea, File.separatorChar, "samples",
-					File.separatorChar, "sample" + sampleIndex));
-			dirFile.mkdirs();
-			
-			Tools tool = new Tools();
-			String treesModel = tool.accessRessourceFile(String.format("%s%s%s%s%s%s%s%s", File.separatorChar
-					, "resources", File.separatorChar, "interface-statique",
-					File.separatorChar, "samples" , File.separatorChar, "treesModel.html"));
-			
-			if(sbOld.toString().length() !=0){
-				List<String> sentOld = Corpus.getSentences(Tools.tempFile("old", ".txt", sbOld.toString()));
-				StringBuilder sbOldMerged = new StringBuilder();
-				for (String sent : sentOld){
-					sbOldMerged.append(String.format("%s%s%s\n", "<conll>", 
-						Tools.replaceLastOccurrence(sent, "\n", "") , "</conll>") );
-				}
-				Tools.ecrire(String.format("%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, "oldTrees.html"),
-						treesModel.replace("{conlls}", sbOldMerged).replace("{samplename}",
-								sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name")) );
-
-			}
-			
-			List<String> sentNew = Corpus.getSentences(Tools.tempFile("new", ".txt", sbNew.toString()));
-			StringBuilder sbNewMerged = new StringBuilder();
-			for (String sent : sentNew){
-				sbNewMerged.append(String.format("%s%s%s\n", "<conll>",
-						Tools.replaceLastOccurrence(sent, "\n", "") , "</conll>") );
-			}
-			
-			
-			// write the conlls inside the treesModel and create the files
-			
-			Tools.ecrire(String.format("%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, "trees.html"),
-					treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
-							sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name")) );
-			
-			sampleIndex++;
-		}
-		
-		
-		
-	}
+//	private  void creaHtmlTrees(String dirPath) throws Exception {
+//		List<String> listDirs = Tools.listDirs(dirPath);
+//		int sampleIndex = 1;
+//		for(String dir : listDirs){
+//			//initiate each raw dir
+//			File dirOld = new File(String.format("%s%s%s%s%s", dirPath, File.separatorChar, dir, File.separatorChar, "old" ));
+//			File dirNew = new File(String.format("%s%s%s%s%s", dirPath, File.separatorChar, dir, File.separatorChar, "new" ));
+//			// get sample informations sample.info
+//			HashMap<String, String> sampleInfos = getSampleInfos(String.format("%s%s%s%s%s", dirPath, File.separatorChar, dir
+//					, File.separatorChar, "sample.info"));
+//			// get content of files in each dir
+//			List<String> oldPaths = Tools.dir2listepaths(dirOld.getAbsolutePath());
+//			List<String> newPaths = Tools.dir2listepaths(dirNew.getAbsolutePath());
+//			StringBuilder sbOld = new StringBuilder();
+//			StringBuilder sbNew = new StringBuilder();
+//			for(String path : oldPaths) sbOld.append( Tools.readFile(path) + "\n" );
+//			for(String path : newPaths) sbNew.append( Tools.readFile(path) + "\n");
+//			// create the paths dirs if none
+//			File dirFile = new File ( String.format("%s%s%s%s%s", baseDirCrea, File.separatorChar
+//					, "samples", File.separatorChar, "sample"+sampleIndex ) );
+//			dirFile.mkdirs();
+//			
+//			// merge the html contents for each tree html
+////			String treesModel = Tools.readFile( String.format("%s%s%s%s%s", 
+////					StaticGenerator.class.getResource("/resources/interface-statique").toExternalForm()
+//////					baseDir
+////					, File.separatorChar, "samples", File.separatorChar , "treesModel.html" ) );
+////			String treesModel = StaticGenerator.class.getResourceAsStream("/resources/interface-statique/samples/treesModel.html");
+//			Tools tool = new Tools();
+////			String treesModel = tool.accessRessourceFile("/resources/interface-statique/samples/treesModel.html");
+//			String treesModel = tool.accessRessourceFile(String.format("%s%s%s%s%s%s%s%s", File.separatorChar
+//					, "resources", File.separatorChar, "interface-statique",
+//					File.separatorChar, "samples" , File.separatorChar, "treesModel.html"));
+//			List<String> sentOld = Corpus.getSentences(Tools.tempFile("old", ".txt", sbOld.toString()));
+//			StringBuilder sbOldMerged = new StringBuilder();
+//			for (String sent : sentOld){
+//				sbOldMerged.append(String.format("%s%s%s\n", "<conll>", 
+//					Tools.replaceLastOccurrence(sent, "\n", "") , "</conll>") );
+//			}
+//			List<String> sentNew = Corpus.getSentences(Tools.tempFile("new", ".txt", sbNew.toString()));
+//			StringBuilder sbNewMerged = new StringBuilder();
+//			for (String sent : sentNew){
+//				sbNewMerged.append(String.format("%s%s%s\n", "<conll>",
+//						Tools.replaceLastOccurrence(sent, "\n", "") , "</conll>") );
+//			}
+//			// write the conlls inside the treesModel and create the files
+//			Tools.ecrire( String.format("%s%s%s", dirFile.getAbsolutePath(), File.separatorChar
+//					, "oldTrees.html") , treesModel.replace("{conlls}", sbOldMerged)
+//								.replace("{samplename}", sampleInfos.get("sample name")));
+//			Tools.ecrire( String.format("%s%s%s", dirFile.getAbsolutePath(), File.separatorChar
+//					, "trees.html") , treesModel.replace("{conlls}", sbNewMerged)
+//								.replace("{samplename}", sampleInfos.get("sample name")));
+//			
+//			sampleIndex++;
+//		}
+//	}
+//	
+//	
+//	private  void creaHtmlTreesRhapsodie(String dirPath) throws Exception {
+//		List<String> listFiles = new ArrayList<String>();
+//		Tools.listFilesAndSubfiles(dirPath, listFiles);
+//		int sampleIndex = 1;
+//		for (String filePath : listFiles){
+//			
+//			String extension = FilenameUtils.getExtension(filePath);
+//			String filename = FilenameUtils.getName(filePath);
+//			String filebasename = FilenameUtils.getBaseName(filePath);
+//			
+//			// get the sample name from the file name
+//			HashMap<String, String> sampleInfos = new HashMap<String, String>();
+//			
+//			System.out.println("PATH " + File.separator + dirPath + File.separator  + filename);
+//			
+//			if(filePath.equals(dirPath + File.separator  + filename)){
+//				System.out.println("equal");
+//				sampleInfos.put("sample name", filename);
+//			}else{
+//				System.out.println("not equal");
+//				String tree = filePath.replace(dirPath+File.separator, "|");
+//				tree = tree.replaceAll("/", "<br/>|-----");
+//				sampleInfos.put("sample name", tree);
+//			}
+//			
+//			StringBuilder sbOld = new StringBuilder();
+//			StringBuilder sbNew = new StringBuilder();
+//			
+//			
+//			String oldVersion = filePath.replace(filename, filebasename)+"_old."+extension;
+//			
+//			if(Tools.dirFileExists(oldVersion)) sbOld.append( Tools.readFile(oldVersion) + "\n" );
+//			sbNew.append( Tools.readFile(filePath) + "\n");
+//			
+//			// create the paths dirs if none
+//			File dirFile = new File(String.format("%s%s%s%s%s", baseDirCrea, File.separatorChar, "samples",
+//					File.separatorChar, "sample" + sampleIndex));
+//			dirFile.mkdirs();
+//			
+//			Tools tool = new Tools();
+//			String treesModel = tool.accessRessourceFile(String.format("%s%s%s%s%s%s%s%s", File.separatorChar
+//					, "resources", File.separatorChar, "interface-statique",
+//					File.separatorChar, "samples" , File.separatorChar, "treesModel.html"));
+//			
+//			if(sbOld.toString().length() !=0){
+//				List<String> sentOld = Corpus.getSentences(Tools.tempFile("old", ".txt", sbOld.toString()));
+//				StringBuilder sbOldMerged = new StringBuilder();
+//				for (String sent : sentOld){
+//					sbOldMerged.append(String.format("%s%s%s\n", "<conll>", 
+//						Tools.replaceLastOccurrence(sent, "\n", "") , "</conll>") );
+//				}
+//				Tools.ecrire(String.format("%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, "oldTrees.html"),
+//						treesModel.replace("{conlls}", sbOldMerged).replace("{samplename}",
+//								sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name")) );
+//
+//			}
+//			
+//			List<String> sentNew = Corpus.getSentences(Tools.tempFile("new", ".txt", sbNew.toString()));
+//			StringBuilder sbNewMerged = new StringBuilder();
+//			for (String sent : sentNew){
+//				sbNewMerged.append(String.format("%s%s%s\n", "<conll>",
+//						Tools.replaceLastOccurrence(sent, "\n", "") , "</conll>") );
+//			}
+//			
+//			
+//			// write the conlls inside the treesModel and create the files
+//			
+//			Tools.ecrire(String.format("%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, "trees.html"),
+//					treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
+//							sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name")) );
+//			
+//			sampleIndex++;
+//		}
+//		
+//		
+//		
+//	}
 	
 	private  void creaHtmlTreesRhapsodieDirs(String dirPath) throws Exception {
 		
@@ -289,7 +289,7 @@ public class StaticGenerator {
 						nextname = ".."+File.separator+"sample"+(sampleIndex+1) + File.separator +FilenameUtils.getName(listFiles.get(i+1));
 						Tools.ecrire(String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename, ".html"),
 								treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
-										sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name"))
+										sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name")+" - Treebank Browser")
 										.replace("{previous}", "../../samples.html").replace("{next}", nextname+".html") );
 						}
 						
@@ -297,14 +297,14 @@ public class StaticGenerator {
 						String previousname = ".."+File.separator+"sample"+(sampleIndex-1) + File.separator + FilenameUtils.getName(listFiles.get(i-1));
 						Tools.ecrire(String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename, ".html"),
 								treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
-										sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name"))
+										sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name")+" - Treebank Browser")
 										.replace("{previous}", previousname+".html").replace("{next}", "../../samples.html") );
 					}else{
 						String nextname = ".."+File.separator+"sample"+(sampleIndex+1) + File.separator +FilenameUtils.getName(listFiles.get(i+1));
 						String previousname = ".."+File.separator+"sample"+(sampleIndex-1) + File.separator +FilenameUtils.getName(listFiles.get(i-1));
 						Tools.ecrire(String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename, ".html"),
 								treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
-										sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name"))
+										sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name")+" - Treebank Browser")
 										.replace("{previous}", previousname+".html").replace("{next}", nextname+".html") );
 					}
 				}
@@ -359,48 +359,48 @@ public class StaticGenerator {
 	 * adapt the sample view with the reality of the trees.html 
 	 * @throws IOException
 	 */
-	private  void adaptSampleView() throws IOException {
-		List<String> listDir = Tools.listDirs(baseDirCrea+File.separatorChar +"samples");
-		StringBuilder samplesView = new StringBuilder();
-		for(String dir : listDir){
-			String dirPath = String.format("%s%s%s%s%s", baseDirCrea , File.separatorChar, "samples" 
-				, File.separatorChar, dir );
-			if(Tools.dirFileExists(String.format("%s%s%s", dirPath, File.separatorChar, "trees.html" ) ) 
-					|| Tools.dirFileExists(String.format("%s%s%s", dirPath, File.separatorChar, "oldTrees.html")) ){
-				// retrieve the numbers of trees for both old and new
-				int n = Tools.countOccurrences( Tools.readFile(dirPath+ File.separatorChar +"trees.html"),"<conll>");
-				int o = 0;
-				if(Tools.dirFileExists(dirPath+ File.separatorChar +"oldTrees.html")) o = Tools.countOccurrences( Tools.readFile(dirPath+ File.separatorChar +"oldTrees.html"),"<conll>");
-				// get the href content for both old and new
-				String relPath = String.format("%s%s"
-						, Tools.relativisePath(dirPath, currentDir).replace(baseDirCrea+File.separatorChar, "")
-						, "trees.html");
-				String relOldPath = String.format("%s%s"
-						, Tools.relativisePath(dirPath, currentDir).replace(baseDirCrea+File.separatorChar, "")
-						, "oldTrees.html");
-				// get the sample name
-				
-				final Matcher matcherOld = pattern.matcher(Tools.readFile(
-						String.format("%s%s"
-								, dirPath + File.separatorChar
-								, "trees.html")));
-				final Matcher matcherNew = pattern.matcher(Tools.readFile(
-						String.format("%s%s"
-								, dirPath + File.separatorChar
-								, "trees.html")));
-				if(matcherOld.find()){
-					//generate the sample row
-					samplesView.append(	sampleRow(o, n, relOldPath, relPath, matcherOld.group(1)) );
-				}else if(matcherNew.find()){
-					samplesView.append(	sampleRow(o, n, relOldPath, relPath, matcherNew.group(1)) );
-				}else{
-					samplesView.append( sampleRow(o, n, relOldPath, relPath, "Nonamed Sample") );
-				}
-			}
-		}
-		
-		replaceInFile(baseDirCrea+File.separatorChar +"samples.html", "{sampleslist}", samplesView.toString() );
-	}
+//	private  void adaptSampleView() throws IOException {
+//		List<String> listDir = Tools.listDirs(baseDirCrea+File.separatorChar +"samples");
+//		StringBuilder samplesView = new StringBuilder();
+//		for(String dir : listDir){
+//			String dirPath = String.format("%s%s%s%s%s", baseDirCrea , File.separatorChar, "samples" 
+//				, File.separatorChar, dir );
+//			if(Tools.dirFileExists(String.format("%s%s%s", dirPath, File.separatorChar, "trees.html" ) ) 
+//					|| Tools.dirFileExists(String.format("%s%s%s", dirPath, File.separatorChar, "oldTrees.html")) ){
+//				// retrieve the numbers of trees for both old and new
+//				int n = Tools.countOccurrences( Tools.readFile(dirPath+ File.separatorChar +"trees.html"),"<conll>");
+//				int o = 0;
+//				if(Tools.dirFileExists(dirPath+ File.separatorChar +"oldTrees.html")) o = Tools.countOccurrences( Tools.readFile(dirPath+ File.separatorChar +"oldTrees.html"),"<conll>");
+//				// get the href content for both old and new
+//				String relPath = String.format("%s%s"
+//						, Tools.relativisePath(dirPath, currentDir).replace(baseDirCrea+File.separatorChar, "")
+//						, "trees.html");
+//				String relOldPath = String.format("%s%s"
+//						, Tools.relativisePath(dirPath, currentDir).replace(baseDirCrea+File.separatorChar, "")
+//						, "oldTrees.html");
+//				// get the sample name
+//				
+//				final Matcher matcherOld = pattern.matcher(Tools.readFile(
+//						String.format("%s%s"
+//								, dirPath + File.separatorChar
+//								, "trees.html")));
+//				final Matcher matcherNew = pattern.matcher(Tools.readFile(
+//						String.format("%s%s"
+//								, dirPath + File.separatorChar
+//								, "trees.html")));
+//				if(matcherOld.find()){
+//					//generate the sample row
+//					samplesView.append(	sampleRow(o, n, relOldPath, relPath, matcherOld.group(1)) );
+//				}else if(matcherNew.find()){
+//					samplesView.append(	sampleRow(o, n, relOldPath, relPath, matcherNew.group(1)) );
+//				}else{
+//					samplesView.append( sampleRow(o, n, relOldPath, relPath, "Nonamed Sample") );
+//				}
+//			}
+//		}
+//		
+//		replaceInFile(baseDirCrea+File.separatorChar +"samples.html", "{sampleslist}", samplesView.toString() );
+//	}
 	
 	/**
 	 * adapt the sample view with the reality of the trees.html and the directory structure
@@ -418,10 +418,11 @@ public class StaticGenerator {
         if(listFilesRoot.size() != 0){
         	samplesView.append("<div class=\"panel-group\"><div class=\"panel panel-default\">"
     			+ "<div class=\"panel-heading\"> "
-    			+ "<button class=\"btn btn-success opacity-hover\" style=\"width:100%\" "
-    			+ "data-toggle=\"collapse\" data-target=\"#collapse"+i+"\">"
-    			+ "<h4 class=\"panel-title\">"+ "root"  +"</h4><span class=\"badge\">"+ listFilesRoot.size() +"</span></button></div>"
-    			+ "<div id=\"collapse"+i+"\" class=\"panel-collapse collapse in\"> <div class=\"panel-body\">");
+//    			+ "<button class=\"btn btn-success opacity-hover\" style=\"width:100%\" "
+//    			+ "data-toggle=\"collapse\" data-target=\"#collapse"+i+"\">"
+//    			+ "<h4 class=\"panel-title\">"+ "root"  +"</h4><span class=\"badge\">"+ listFilesRoot.size() +"</span></button></div>"
+    			+ "</div>"
+				+ "<div id=\"collapse"+i+"\" class=\"panel-collapse collapse in\"> <div class=\"panel-body\">");
         }else{
         	samplesView.append("<div class=\"panel-group\"><div class=\"panel panel-default\">"
         			+ "<div class=\"panel-heading\"> "

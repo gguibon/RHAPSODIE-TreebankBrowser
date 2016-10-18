@@ -1025,6 +1025,17 @@ transition: all 0.2s ease-in-out;
 -webkit-transition: all 0.2s ease-in-out;
 }
 
+.opacity-hover2 {
+  opacity:0.4;
+  transition: all 0.4s ease-in-out;
+-webkit-transition: all 0.4s ease-in-out;
+}
+.opacity-hover2:hover {
+  opacity:1;
+  transform: scale(1.1);
+transition: all 0.2s ease-in-out;
+-webkit-transition: all 0.2s ease-in-out;
+}
 
 .btn-list {
   width:100%;
@@ -1100,17 +1111,19 @@ margin-bottom: -1px;
 }​
 
 .arrownav-hover {
+  opacity:0.8;
   transition: all 0.4s ease-in-out;
 -webkit-transition: all 0.4s ease-in-out;
 }
 .arrownav-hover:hover {
-  opacity:0.8;
+  opacity:1;
   transform: scale(3);
 transition: all 0.2s ease-in-out;
 -webkit-transition: all 0.2s ease-in-out;
 }
 
 .shrink {
+  opacity: 0.8;
   transition: all 0.4s ease-in-out;
 -webkit-transition: all 0.4s ease-in-out;
 }

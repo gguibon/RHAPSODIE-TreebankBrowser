@@ -18,6 +18,8 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
@@ -93,6 +95,22 @@ public class PersonOverviewController {
         personTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> disableBtn());
         
+        
+     // set default action for ENTER to show the edit panel if a person is selected
+        personTable.setOnKeyPressed(new EventHandler<KeyEvent>()
+        {
+            @Override
+            public void handle(KeyEvent ke)
+            {
+                if (ke.getCode().equals(KeyCode.ENTER))
+                {
+                	ProjectUI selectedProject = personTable.getSelectionModel().getSelectedItem();
+                    if (selectedProject != null) {
+                    	handleGenerateUI();
+                    }
+                }
+            }
+        });
         
         
         // Add event handler for double click on row

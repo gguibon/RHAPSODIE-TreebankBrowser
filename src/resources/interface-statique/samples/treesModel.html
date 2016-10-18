@@ -42,7 +42,10 @@
     </head>
 
     <body id="page-top" data-spy="scroll" data-target=".navbar-custom" class="bg-dark">
-      <div id="loading"></div>
+      <div id="loading">
+        <div id='loading-progress-bar' class='progress overlay-content' > </div>
+        <div  class='overlay-content' > <button type='button' class='btn btn-danger opacity-hover' id='loaderstop'>Stop!</button>  </div>
+      </div>
      <div id="page-wrap">
       
 <!-- The actual snackbar -->
@@ -82,13 +85,20 @@
   <div id="divOnRight" style=" position: fixed; right: 50px;">
     <a class="animsition-link " href="{next}"><img src="../img/icons/right-arrow-key-grey.svg" class="arrownav-hover" onmouseover="this.src='../img/icons/right-arrow-key.svg';" onmouseout="$(this).addClass('shrink');   this.src='../img/icons/right-arrow-key-grey.svg'; $(this).addClass(arrownav-hover);" /></a>
   </div>
-  <div id="divOnRightBottom" style=" position: fixed; right: 65px; bottom: 50px;">
+  <!-- <div id="divOnRightBottom" style=" position: fixed; right: 65px; bottom: 50px;">
     <button type="button" class="btn btn-success opacity-hover" id="loader">Speed Up!</button>
   </div>
   <div id="divOnRightBottom2" style=" position: fixed; right: 200px; bottom: 50px;">
     <input class="opacity-hover" type="checkbox" name="my-checkbox" checked data-size="normal" data-on-color="primary" data-off-color="danger" data-on-text="Timer" data-off-text="Scroll" data-label-text="Auto Load" data-handle-width="200">
+  </div> -->
+  <div class="container" style="position: fixed; top: 75px; left: 10px; width: 20%;">
+    <div class="row">
+      <div class="col-sm-4"><button type="button" class="btn btn-danger opacity-hover2" onclick="stopload()" title="Stop: stop charging further trees. Charge only on scroll" id="stop"><img src="../img/icons/stop-button.svg"/></button></div>
+      <div class="col-sm-4"><button type="button" class="btn btn-default opacity-hover2" onclick="resumeload()" title="Show: show all trees - pausing between trees (default)" id="show"><img src="../img/icons/play-arrow.svg"/></button></div>
+      <div class="col-sm-4"><button type="button" class="btn btn-info opacity-hover2" title="Fast forward: show all trees without pausing - might slow down the browser until finished" id="loader"><img src="../img/icons/fast-forward-button.svg"/></button></div>
+    </div>
   </div>
-  </div>
+</div>
 
 <section id="main-content" style="height:100%">
  <div id="guts" style="height:100%; padding-bottom:0;" class="animsition" data-animsition-in-class="fade-in-up"

@@ -9,7 +9,7 @@ Treebank Browser is a graphical tool which allows to browse treebanks graphicall
 - etc.
 
 
-The actual version is [0.8.9](https://github.com/gguibon/TreebankBrowser/releases/tag/0.8.9). 
+The actual version is [0.9.1](https://github.com/gguibon/TreebankBrowser/releases/tag/0.9.1). 
 
 The manager UI is an evolution of [this tutorial from code.makery](http://code.makery.ch/library/javafx-8-tutorial/ "code.makery tutorial") with several additionnal features.
 
