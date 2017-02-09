@@ -66,7 +66,7 @@ public class StaticGenerator {
 		creaHtmlTreesRhapsodieDirs(this.rawDir);
 //		adaptSampleView();
 		adaptSampleViewWithDirs();
-		File index = new File(baseDirCrea+ File.separatorChar +"samples.html");
+		File index = new File(baseDirCrea+ File.separatorChar +"index.html");
 		openIt(index.getAbsolutePath());
 //		((JavascriptExecutor)this.webDriver).executeScript("alert('Test')");
 //		this.webDriver.switchTo().alert().accept();
@@ -284,13 +284,13 @@ public class StaticGenerator {
 							Tools.ecrire(String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename, ".html"),
 									treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
 											sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name"))
-											.replace("{previous}", "../../samples.html").replace("{next}", "../../samples.html") );
+											.replace("{previous}", "../../index.html").replace("{next}", "../../index.html") );
 						}else{
 						nextname = ".."+File.separator+"sample"+(sampleIndex+1) + File.separator +FilenameUtils.getName(listFiles.get(i+1));
 						Tools.ecrire(String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename, ".html"),
 								treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
 										sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name")+" - Treebank Browser")
-										.replace("{previous}", "../../samples.html").replace("{next}", nextname+".html") );
+										.replace("{previous}", "../../index.html").replace("{next}", nextname+".html") );
 						}
 						
 					}else if(i+1 == listFiles.size()){
@@ -298,7 +298,7 @@ public class StaticGenerator {
 						Tools.ecrire(String.format("%s%s%s%s", dirFile.getAbsolutePath(), File.separatorChar, filename, ".html"),
 								treesModel.replace("{conlls}", sbNewMerged).replace("{samplename}",
 										sampleInfos.get("sample name")).replace("{title}", sampleInfos.get("sample name")+" - Treebank Browser")
-										.replace("{previous}", previousname+".html").replace("{next}", "../../samples.html") );
+										.replace("{previous}", previousname+".html").replace("{next}", "../../index.html") );
 					}else{
 						String nextname = ".."+File.separator+"sample"+(sampleIndex+1) + File.separator +FilenameUtils.getName(listFiles.get(i+1));
 						String previousname = ".."+File.separator+"sample"+(sampleIndex-1) + File.separator +FilenameUtils.getName(listFiles.get(i-1));
@@ -523,7 +523,7 @@ public class StaticGenerator {
 	        i++;
 	    }
 	    
-	    replaceInFile(baseDirCrea+File.separatorChar +"samples.html", "{sampleslist}", samplesView.toString() );
+	    replaceInFile(baseDirCrea+File.separatorChar +"index.html", "{sampleslist}", samplesView.toString() );
 		}
 	
 	

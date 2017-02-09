@@ -258,7 +258,9 @@ function drawConll1(elementConll,num) {
 
 	// inject the holder div and sentence div
 	elementConll.innerHTML = '<div class="wow fadeInLeft" >'//data-wow-delay="0.5s">'
-	+ '<form>  <div class="input-group"> <label id="copy-input'+num+'" for="#copy-button'+num+'" style="font-size: 12;">'+res+'#tree'+num+'</label>  <span class="input-group-btn"> <button class="btn btn-default opacity-hover" type="button" id="copy-button'+num+'" data-clipboard-text="'+res+'#tree'+num+'" data-toggle="tooltip" data-placement="button"  title="Copy to Clipboard"> <img src="../img/icons/clipboard.svg"/> </button> </span> </div> </form>'
+	+ '<form>  <div class="input-group"> <label id="copy-input'+num+'" for="#copy-button'+num+'" style="font-size: 12;">'+res+'#tree'+num+'</label> '
+	+ ' <span class="input-group-btn"> <button type="button" class="btn btn-default opacity-hover" onclick="exporto('+(num-1)+');" data-toggle="tooltip" data-placement="button"  title="Save the tree to SVG file" ><img src="../img/icons/download.svg"/></button>'
+	+ ' <button class="btn btn-default opacity-hover" type="button" id="copy-button'+num+'" data-clipboard-text="'+res+'#tree'+num+'" data-toggle="tooltip" data-placement="button"  title="Copy to Clipboard"> <img src="../img/icons/clipboard.svg"/> </button> </span> </div> </form>'
 	+ '<div id="tree'+num+'"><div id="sentence'+num+'" class="sentences"></div>'
 	+ '<div id="holder'+num+'" class="svgholder" style="background-color: white; overflow: auto"> </div></div>';
 
@@ -287,7 +289,7 @@ function drawConll(elementConll,num) {
 
 	div = document.createElement('div');
 	// div.id = 'newdiv'+num;
-	div.innerHTML = '<form>  <div class="input-group"> <span class="input-group-btn"> <button class="btn btn-success" style="border-radius:50%" type="button" id="num-button'+num+'"  data-toggle="tooltip" data-placement="button"  title="This sentence\'s number"> <strong>'+num+' / '+nbMaxSent+'</strong> </button> </span> <label id="copy-input'+num+'" for="#copy-button'+num+'">'+res+'#tree'+num+'</label>  <span class="input-group-btn"> <button class="btn btn-default opacity-hover" type="button" id="copy-button'+num+'" data-clipboard-text="'+res+'#tree'+num+'" data-toggle="tooltip" data-placement="button"  title="Copy to Clipboard"> <img src="../img/icons/clipboard.svg"/> </button> </span> </div> </form>'
+	div.innerHTML = '<form>  <div class="input-group"> <span class="input-group-btn"> <button class="btn btn-success" style="border-radius:50%" type="button" id="num-button'+num+'"  data-toggle="tooltip" data-placement="button"  title="This sentence\'s number"> <strong>'+num+' / '+nbMaxSent+'</strong> </button> </span> <label id="copy-input'+num+'" for="#copy-button'+num+'">'+res+'#tree'+num+'</label>  <span class="input-group-btn"> <button type="button" class="btn btn-default opacity-hover" onclick="exporto('+(num-1)+');" data-toggle="tooltip" data-placement="button"  title="Save the tree to SVG file" ><img src="../img/icons/download.svg"/></button> <button class="btn btn-default opacity-hover" type="button" id="copy-button'+num+'" data-clipboard-text="'+res+'#tree'+num+'" data-toggle="tooltip" data-placement="button"  title="Copy to Clipboard"> <img src="../img/icons/clipboard.svg"/> </button> </span> </div> </form>'
 		+ '<div id="tree'+num+'"><div id="sentence'+num+'" class="sentences"></div>'
 		+ '<div id="holder'+num+'" class="svgholder" style="background-color: white; overflow: auto"> </div>';
 		div.className = "new";
@@ -490,4 +492,129 @@ function resumeload(){
 
 function stopload(){
 	autoload = false;
+}
+
+/* save svg files */
+
+var exportSVG = function(svg, name) {
+  // first create a clone of our svg node so we don't mess the original one
+  var clone = svg.cloneNode(true);
+  // parse the styles
+  parseStyles(clone);
+
+  // create a doctype
+  var svgDocType = document.implementation.createDocumentType('svg', "-//W3C//DTD SVG 1.1//EN", "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd");
+  // a fresh svg document
+  var svgDoc = document.implementation.createDocument('http://www.w3.org/2000/svg', 'svg', svgDocType);
+  // replace the documentElement with our clone 
+  svgDoc.replaceChild(clone, svgDoc.documentElement);
+  // get the data
+  var svgData = (new XMLSerializer()).serializeToString(svgDoc);
+
+  // now you've got your svg data, the following will depend on how you want to download it
+  // e.g yo could make a Blob of it for FileSaver.js
+  
+  var blob = new Blob([svgData.replace(/></g, '>\n\r<')]);
+  saveAs(blob, name+ '.svg');
+
+  /*canvas_options_form = $("canvas-options");
+  canvas_filename = $("canvas-filename")
+  canvas_options_form.addEventListener("submit", function(event) {
+	event.preventDefault();
+	svg.toBlobHD(function(blob) {
+		saveAs(
+			  blob
+			, (canvas_filename.value || canvas_filename.placeholder) + ".png"
+		);
+	}, "image/png");
+}, false);*/
+  
+  // here I'll just make a simple a with download attribute
+
+  /*
+  var a = document.createElement('a');
+  a.href = 'data:image/svg+xml; charset=utf8, ' + encodeURIComponent(svgData.replace(/></g, '>\n\r<'));
+  a.download = 'myAwesomeSVG.svg';
+  a.innerHTML = 'download the svg file';
+  document.body.appendChild(a);
+  */
+
+};
+
+var parseStyles = function(svg) {
+  var styleSheets = [];
+  var i;
+  // get the stylesheets of the document (ownerDocument in case svg is in <iframe> or <object>)
+  var docStyles = svg.ownerDocument.styleSheets;
+
+  // transform the live StyleSheetList to an array to avoid endless loop
+  for (i = 0; i < docStyles.length; i++) {
+    styleSheets.push(docStyles[i]);
+  }
+
+  if (!styleSheets.length) {
+    return;
+  }
+
+  var defs = svg.querySelector('defs') || document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+  if (!defs.parentNode) {
+    svg.insertBefore(defs, svg.firstElementChild);
+  }
+  svg.matches = svg.matches || svg.webkitMatchesSelector || svg.mozMatchesSelector || svg.msMatchesSelector || svg.oMatchesSelector;
+
+
+  // iterate through all document's stylesheets
+  for (i = 0; i < styleSheets.length; i++) {
+    var currentStyle = styleSheets[i]
+
+    var rules;
+    try {
+      rules = currentStyle.cssRules;
+    } catch (e) {
+      continue;
+    }
+    // create a new style element
+    var style = document.createElement('style');
+    // some stylesheets can't be accessed and will throw a security error
+    var l = rules && rules.length;
+    // iterate through each cssRules of this stylesheet
+    for (var j = 0; j < l; j++) {
+      // get the selector of this cssRules
+      var selector = rules[j].selectorText;
+      // probably an external stylesheet we can't access
+      if (!selector) {
+        continue;
+      }
+
+      // is it our svg node or one of its children ?
+      if ((svg.matches && svg.matches(selector)) || svg.querySelector(selector)) {
+
+        var cssText = rules[j].cssText;
+        // append it to our <style> node
+        style.innerHTML += cssText + '\n';
+      }
+    }
+    // if we got some rules
+    if (style.innerHTML) {
+      // append the style node to the clone's defs
+      defs.appendChild(style);
+    }
+  }
+
+};
+
+function exporto(num) {
+	var sentenceName = $('#sentence'+(num+1)).text();
+	exportSVG($('svg')[num], sentenceName);
+}
+
+function exportall() {
+	var svglist = document.getElementsByTagName("svg");
+	console.log(svglist.length)
+	
+	for(var i =  0; i < svglist.length ; i++){
+		var sentenceName = $('#sentence'+(i+1)).text();
+		var sentenceName = sentenceName.substring(0, 150);
+		exportSVG(svglist[i], sentenceName);
+	}
 }

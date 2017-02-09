@@ -37,6 +37,7 @@
       <script type="text/javascript" src="../js/arborator.view.js"></script>
       <script type="text/javascript" src="../js/justDrawConll.js"></script>
       <script type="text/javascript" src="../js/conll2tree.js"></script>
+      <script type="text/javascript" src="../js/filesaver.min.js"></script>
       
       
     </head>
@@ -58,7 +59,7 @@
          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
           <i class="fa fa-bars"></i>
         </button>
-        <a class="navbar-brand animsition-link" href="../../samples.html">
+        <a class="navbar-brand animsition-link" href="../../index.html">
           <img src="../img/icons/list-orange.svg" alt="" title="Samples List" class="opacity-hover"/>
         </a>
         <span>{samplename}</span>
@@ -93,9 +94,10 @@
   </div> -->
   <div class="container" style="position: fixed; top: 75px; left: 10px; width: 20%;">
     <div class="row">
-      <div class="col-sm-4"><button type="button" class="btn btn-danger opacity-hover2" onclick="stopload()" title="Stop: stop charging further trees. Charge only on scroll" id="stop"><img src="../img/icons/stop-button.svg"/></button></div>
-      <div class="col-sm-4"><button type="button" class="btn btn-default opacity-hover2" onclick="resumeload()" title="Show: show all trees - pausing between trees (default)" id="show"><img src="../img/icons/play-arrow.svg"/></button></div>
-      <div class="col-sm-4"><button type="button" class="btn btn-info opacity-hover2" title="Fast forward: show all trees without pausing - might slow down the browser until finished" id="loader"><img src="../img/icons/fast-forward-button.svg"/></button></div>
+      <div class="col-sm-3"><button type="button" class="btn btn-danger opacity-hover2" onclick="stopload()" title="Stop: stop charging further trees. Charge only on scroll" id="stop"><img src="../img/icons/stop-button.svg"/></button></div>
+      <div class="col-sm-3"><button type="button" class="btn btn-default opacity-hover2" onclick="resumeload()" title="Show: show all trees - pausing between trees (default)" id="show"><img src="../img/icons/play-arrow.svg"/></button></div>
+      <div class="col-sm-3"><button type="button" class="btn btn-info opacity-hover2" title="Fast forward: show all trees without pausing - might slow down the browser until finished" id="loader"><img src="../img/icons/fast-forward-button.svg"/></button></div>
+      <div class="col-sm-3"><button type="button" class="btn btn-success opacity-hover2" onclick="exportall();" title="Download: Save the currently loaded trees. To save them all speed up the loading using the fast forward button. Then press this button."><img src="../img/icons/download.svg"/></button></div>
     </div>
   </div>
 </div>
