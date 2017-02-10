@@ -23,8 +23,10 @@ public class Corpus {
 
 		while ((texte = lecteur.readLine()) != null) {
 			if (texte.length() == 0) {
-				phrases.add(phrase.toString());
-				phrase = new StringBuilder();
+				if (phrase.length() > 0){
+					phrases.add(phrase.toString());
+					phrase = new StringBuilder();
+				}
 				continue;
 			}
 			phrase.append( texte + "\n" );
